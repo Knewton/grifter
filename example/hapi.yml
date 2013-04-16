@@ -1,0 +1,17 @@
+#base configuration of services goes here
+services:
+  twitter:
+    hostname: 'api.twitter.com'
+    port: 443
+    ssl: true
+    ignore_ssl_cert: false
+    base_uri: '/1.1'
+
+  google:
+    hostname: 'google.com'
+    port: 80
+    ssl: 'auto'
+    ignore_ssl_cert: false
+
+hapi_globs:
+  - 'example/**/*_hapis.rb'

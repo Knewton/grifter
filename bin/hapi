@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+require 'optparse'
+
+require_relative '../lib/hapi'
+
+Log = Hapi::Log
+
+Log.level = Logger::INFO
+
+#Deal with the cmd line
+def parse_cmd_line
+  options = {
+      files: [],
+      config_file: 'hapi.yml',
+      authenticate: true,
+  }
+
+  optparse = OptionParser.new do |opts|
+    opts.banner = %Q|
+      Hapi HTTP APIs Client
+      example, run a data script: bin/hapi.rb -f script.rb
+      example, call a method:     bin/hapi.rb <hapi method name>
+
+    |
+
+    opts.on("-f", "--script=FILENAME",
+      "specify a script file to run") { |file| options[:files] << file }
+
+    opts.on("-v", "--verbose",
+      "enable debug logging") { Log.level = Logger::DEBUG }
+
+    opts.on("-c", "--config=FILENAME",
+      "config filename") { |fn| options[:config_file] = fn }
+
+    opts.on("-d", "--no_authenticate",
+           "Do not authenticate") { options[:authenticate] = false }
+
+  end
+  optparse.parse!
+  options
+end
+options = parse_cmd_line
+
+hapi = Hapi.new options
+
+#TODO: come up with more comprehensive convention based authenticatation scheme
+if options[:authenticate]
+  hapi.authenticate
+end
+
+if not(ARGV.empty?)
+  method = ARGV.shift
+  response = hapi.send(method.to_sym, *ARGV)
+  puts response.inspect
+
+elsif not(options[:files].empty?)
+  options[:files].each do |script_file|
+    hapi.run_script_file(script_file)
+  end
+
+else
+  Kernel.abort "Nothing to do?  use -f or give a method name on the cmd line"
+end

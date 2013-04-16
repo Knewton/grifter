@@ -1,0 +1,4 @@
+.rvmrc
+*.html
+Gemfile.lock
+oauth.yml

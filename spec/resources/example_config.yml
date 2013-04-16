@@ -1,0 +1,19 @@
+---
+services:
+  myapi:
+    hostname: 'myapi.com'
+
+  myotherapi:
+    hostname: 'myotherapi.com'
+
+environments:
+  dev:
+    myapi:
+      hostname: 'dev.myapi.com'
+      port: 123  
+
+  staging:
+    myapi:
+      hostname: 'staging.myapi.com'
+      port: 456
+      ignore_ssl_cert: true
