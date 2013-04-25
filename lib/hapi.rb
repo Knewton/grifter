@@ -10,6 +10,7 @@ class Hapi
     config_file: 'hapi.yml',
     #TODO: service_config: nil,
     hapi_globs: ['*_hapis/**/*_hapis.rb'],
+    authenticate: false,
   }
   def initialize options={}
     options = DefaultConfigOptions.merge(options)
@@ -44,6 +45,9 @@ class Hapi
       end
     end
 
+    if @config[:authenticate]
+      self.hapi_authenticate_do
+    end
   end
 
   attr_reader :services
@@ -66,5 +70,14 @@ class Hapi
     #by running in a anonymous class, we protect this class's namespace
     anon_class = BlankSlate.new(self)
     anon_class.instance_eval(script)
+  end
+
+  #calls all methods that end with hapi_authenticate
+  def hapi_authenticate_do
+    auth_methods = self.singleton_methods.select { |m| m =~ /hapi_authenticate$/ }
+    auth_methods.each do |m|
+      Log.debug "Executing a hapi_authentication on method: #{m}"
+      self.send(m)
+    end
   end
 end

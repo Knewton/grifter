@@ -16,6 +16,6 @@ def application_authenticate
    true
 end
 
-def authenticate
+def twitter_hapi_authenticate
   application_authenticate
 end

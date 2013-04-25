@@ -20,4 +20,24 @@ describe Hapi do
       hapi.should respond_to :timeline_for
     end
   end
+
+  describe "Authentication" do
+    it "when authenticate is invoked, it should call any method ending in hapi_authenticate" do
+      hapi = Hapi.new :config_file => 'example/hapi.yml'
+      hapi.define_singleton_method :test_svc_hapi_authenticate do
+        true
+      end
+      hapi.define_singleton_method :test_svc_hapi_authenticate_substring_only do
+        true
+      end
+
+      hapi.should_receive :test_svc_hapi_authenticate
+      hapi.should_not_receive :test_svc_hapi_authenticate_substring_only
+
+      hapi.hapi_authenticate_do
+    end
+
+    #TODO: test that ensures hapi_authenticate_do is called
+    #      if Hapi is instantiated with :authenticate => true
+  end
 end

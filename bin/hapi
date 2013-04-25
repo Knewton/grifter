@@ -13,6 +13,7 @@ def parse_cmd_line
       files: [],
       config_file: 'hapi.yml',
       authenticate: true,
+      environment: nil,
   }
 
   optparse = OptionParser.new do |opts|
@@ -32,6 +33,9 @@ def parse_cmd_line
     opts.on("-c", "--config=FILENAME",
       "config filename") { |fn| options[:config_file] = fn }
 
+    opts.on('-e', '--environment=ENVIRONMENT',
+           "environment name") { |e| options[:environment] = e.to_sym }
+
     opts.on("-d", "--no_authenticate",
            "Do not authenticate") { options[:authenticate] = false }
 
@@ -42,11 +46,6 @@ end
 options = parse_cmd_line
 
 hapi = Hapi.new options
-
-#TODO: come up with more comprehensive convention based authenticatation scheme
-if options[:authenticate]
-  hapi.authenticate
-end
 
 if not(ARGV.empty?)
   method = ARGV.shift
