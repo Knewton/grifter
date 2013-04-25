@@ -9,41 +9,77 @@ Features
 - Script calls to API(s)
 - Simplify complex interactions within/across APIs into simple method calls
 - Unified approach to handling request errors
-- Craft clean API tests using the Grifter RSPec helper
-- Convention over configuration approach to enxtending
+- Craft clean API tests using the included RSPec helper
+- Convention over configuration approach to defining the API interface
 
 Getting Started
 ---------------
+Lets demo how this works using a simple example of an API that requires no
+authentication.  An example against an API requiring authentication can
+be found here:  LINK_TO_EXAMPLE
 
-.make a project directory
--------------------------
-mkdir be_happy
-cd be_happy
--------------------------
+The OpenWeatherMap is a good candidate for a simple API
+which is accessible without needing any authentication key:
+[http://api.openweathermap.org/]
 
-.setup hapi.yml
-------------------
-#all config files must have a services block
-services_defaults:
-  twitter:
-    hostname: 'twitter.com'
-------------------
 
-.make the hapis directory
------------------------
-mkdir hapis
-touch hapis/google_my_tweets.rb
------------------------
+### make a project directory
 
-.make a hapi file/method, in google_my_tweets.rb
------------------------
-def kanyes_tweets
-  twitter.get "/statuses/timeline?twitter_id=kanyewest"
-end
------------------------
+    mkdir weather
+    cd weather
 
-.and hapi away!
-----------------
-hapi tweets_for kanyewest
-----------------
+### setup hapi.yml
+
+     services_defaults:
+       owm:
+         hostname: 'http://api.openweathermap.org'
+
+### make the hapis directory, and a hapi file
+
+    mkdir owm_hapis
+    touch owm_hapis/weather_hapi.rb
+
+### add method for checking weather to owm/weather.rb
+    def weather_for city
+      owm.get "/data/2.5/weather?q=#{URI.encode(city)}"
+    end
+    
+
+
+### Call it from the cmd line:
+    $ hapi weather_for 'Pleasantville, NY'
+
+And that returns something like this:
+    {"coord"=>{"lon"=>-73.79169, "lat"=>41.13436}, "sys"=>{"country"=>"United States of America", "sunrise"=>1366883974, "sunset"=>1366933583}, "weather"=>[{"id"=>501, "main"=>"Rain", "description"=>"moderate rain", "icon"=>"10d"}], "base"=>"global stations", "main"=>{"temp"=>290.46, "humidity"=>26, "pressure"=>1020, "temp_min"=>289.15, "temp_max"=>292.59}, "wind"=>{"speed"=>2.06, "gust"=>4.11, "deg"=>265}, "rain"=>{"1h"=>2.32}, "clouds"=>{"all"=>0}, "dt"=>1366926419, "id"=>5131757, "name"=>"Pleasantville", "cod"=>200}
+
+Use the -v command line option and see the full request/response logged to StdOut
+
+### Script it
+Make a file called temperatures.rb with this in it:
+
+    [
+      'New York, NY',
+      'Toronto, Canada',
+      'Paris, France',
+      'Tokyo, Japan',
+      'Sydney, Australia',
+    ].each do |city|
+      weather = weather_for city
+      kelvin = weather['main']['temp']
+      celcius = (kelvin - 273.15).round
+      puts "#{city}: #{celcius} celcius"
+    end
+
+And then run the hapi script like so:
+
+    hapi -f temperatures.rb
+
+And get this nice output:
+
+    I: [04/25/13 17:59:22][hapi] - Running data script 'temperatures.rb'
+    New York, NY: 18 celcius
+    Toronto, Canada: 7 celcius
+    Paris, France: 18 celcius
+    Tokyo, Japan: 16 celcius
+    Sydney, Australia: 14 celcius
 

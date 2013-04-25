@@ -7,11 +7,8 @@ services:
     ignore_ssl_cert: false
     base_uri: '/1.1'
 
-  google:
-    hostname: 'google.com'
-    port: 80
-    ssl: 'auto'
-    ignore_ssl_cert: false
+  owm:
+    hostname: 'api.openweathermap.org'
 
 hapi_globs:
   - 'example/**/*_hapis.rb'
