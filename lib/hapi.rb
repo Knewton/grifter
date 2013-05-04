@@ -7,7 +7,6 @@ class Hapi
   include Hapi::Configuration
 
   DefaultConfigOptions = {
-    config_file: 'hapi.yml',
     #TODO: service_config: nil,
     hapi_globs: ['*_hapis/**/*_hapis.rb'],
     authenticate: false,

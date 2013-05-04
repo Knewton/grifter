@@ -17,7 +17,9 @@ class Hapi
     end
 
     def load_config_file options={}
-      options = {config_file: 'hapi.yml'}.merge(options)
+      options = {
+        config_file: ENV['HAPI_CONFIG_FILE'] ? ENV['HAPI_CONFIG_FILE'] : 'hapi.yml'
+      }.merge(options)
       Log.debug "Loading config file '#{options[:config_file]}'"
       unless File.exist?(options[:config_file])
         raise "No such config file: '#{options[:config_file]}'"

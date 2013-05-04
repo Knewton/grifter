@@ -81,6 +81,13 @@ describe Hapi::Configuration do
         },
       })
     end
+
+    it "should take the filename from an environment variable if specified" do
+      ENV['HAPI_CONFIG_FILE'] = 'spec/resources/example_config.yml'
+      config = configuration.load_config_file
+      config[:services].keys.should =~ [:myapi, :myotherapi]
+      ENV['HAPI_CONFIG_FILE'] = nil
+    end
   end
 
   describe "environment based overriding" do
