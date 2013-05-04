@@ -1,10 +1,12 @@
 require 'base64'
 
-TwitterKeys = YAML.load_file('example/twitter_hapis/oauth.yml')
+def twitter_keys
+  @_twitter_keys ||= YAML.load_file('example/twitter_hapis/oauth.yml')
+end
 
 def application_authenticate
   params = { 'grant_type' => 'client_credentials' }
-  token = TwitterKeys['consumer_key'] + ':' + TwitterKeys['consumer_secret']
+  token = twitter_keys['consumer_key'] + ':' + twitter_keys['consumer_secret']
   encoded_token = Base64.strict_encode64(token)
   response = twitter.post_form '/oauth2/token', params,
    base_uri: '',

@@ -16,14 +16,14 @@ describe Hapi do
 
   describe "Hapi files" do
     it "should allow loading hapi files which define methods for interacting with apis" do
-      hapi = Hapi.new :config_file => 'example/hapi.yml'
+      hapi = Hapi.new :config_file => 'spec/resources/hapi.yml'
       hapi.should respond_to :timeline_for
     end
   end
 
   describe "Authentication" do
     it "when authenticate is invoked, it should call any method ending in hapi_authenticate" do
-      hapi = Hapi.new :config_file => 'example/hapi.yml'
+      hapi = Hapi.new :config_file => 'spec/resources/example_config.yml'
       hapi.define_singleton_method :test_svc_hapi_authenticate do
         true
       end
