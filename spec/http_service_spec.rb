@@ -43,6 +43,12 @@ describe Hapi::HTTPService do
         @svc.send(method, '/testing', {'a_key' => 'a_value'}).should be_a Hash
       end
     end
+
+    it "should remember the last request and response" do
+        @svc.post '/testing', 'a_key' => 'a_value'
+        @svc.last_request.should be_a Net::HTTP::Post
+        @svc.last_response.should be_a Net::HTTPOK
+    end
   end
 
   describe "error handling" do

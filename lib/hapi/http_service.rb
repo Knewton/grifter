@@ -31,6 +31,10 @@ class Hapi
 
     attr_reader :headers, :name
 
+    #this is useful for testing apis, and other times
+    #you want to interrogate the http details of a response
+    attr_reader :last_request, :last_response
+
     RequestLogSeperator = '-'*40
     def do_request req
       Log.debug RequestLogSeperator
@@ -41,6 +45,9 @@ class Hapi
       Log.debug "RESPONSE CODE: #{response.code}"
       Log.debug "RESPONSE HEADERS: #{response.to_hash}"
       Log.debug "RESPONSE BODY:\n#{jsonify response.body}\n"
+
+      @last_request = req
+      @last_response = response
 
       raise RequestException.new(req, response) unless response.kind_of? Net::HTTPSuccess
 
