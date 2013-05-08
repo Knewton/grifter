@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "example/girfter.yml",
     "example/owm_grifts/weather_grifts.rb",
     "example/temperatures.rb",
+    "grifter.gemspec",
     "lib/grifter.rb",
     "lib/grifter/blankslate.rb",
     "lib/grifter/configuration.rb",
