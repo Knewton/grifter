@@ -32,15 +32,6 @@ class Grifter
       @services << service
     end
 
-    #setup the helpers if any
-    if @config[:helper_globs]
-      @config[:helper_globs].each do |glob|
-        Dir[glob].each do |helper_file|
-          load_helper_file helper_file
-        end
-      end
-    end
-
     #setup the grifter methods if any
     if @config[:grift_globs]
       @config[:grift_globs].each do |glob|
@@ -65,7 +56,6 @@ class Grifter
     anon_mod.class_eval(code, filename, 1)
     self.extend anon_mod
   end
-  alias :load_helper_file :load_grifter_file
 
   def run_script_file filename
     Log.info "Running data script '#{filename}'"
