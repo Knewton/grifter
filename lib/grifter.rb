@@ -8,7 +8,7 @@ class Grifter
 
   DefaultConfigOptions = {
     #TODO: service_config: nil,
-    grifter_globs: ['*_grifters/**/*_grifters.rb'],
+    grifter_globs: ['*_grifts/**/*_grifts.rb'],
     authenticate: false,
     load_from_config_file: true,
     services: {},
