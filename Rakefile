@@ -14,10 +14,10 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "hapi"
-  gem.homepage = "http://github.com/knewton/hapi"
+  gem.name = "grifter"
+  gem.homepage = "http://github.com/knewton/grifter"
   gem.license = "MIT"
-  gem.summary = %Q{Make calls to HTTP JSON APIs with hapiness}
+  gem.summary = %Q{Make calls to HTTP JSON APIs with ease and confidence}
   gem.description = %Q{convention based approach to interfacing with an HTTP JSON API.}
   gem.email = "rob@knewton.com"
   gem.authors = ["Robert Schultheis"]
@@ -35,7 +35,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "hhapi #{version}"
+  rdoc.title = "grifter #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

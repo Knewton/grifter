@@ -1,14 +1,14 @@
-require_relative 'hapi/http_service'
-require_relative 'hapi/configuration'
-require_relative 'hapi/log'
-require_relative 'hapi/blankslate'
+require_relative 'grifter/http_service'
+require_relative 'grifter/configuration'
+require_relative 'grifter/log'
+require_relative 'grifter/blankslate'
 
-class Hapi
-  include Hapi::Configuration
+class Grifter
+  include Grifter::Configuration
 
   DefaultConfigOptions = {
     #TODO: service_config: nil,
-    hapi_globs: ['*_hapis/**/*_hapis.rb'],
+    grifter_globs: ['*_grifters/**/*_grifters.rb'],
     authenticate: false,
     load_from_config_file: true,
     services: {},
@@ -41,23 +41,23 @@ class Hapi
       end
     end
 
-    #setup the hapi methods if any
-    if @config[:hapi_globs]
-      @config[:hapi_globs].each do |glob|
-        Dir[glob].each do |hapi_file|
-          load_hapi_file hapi_file
+    #setup the grifter methods if any
+    if @config[:grifter_globs]
+      @config[:grifter_globs].each do |glob|
+        Dir[glob].each do |grifter_file|
+          load_grifter_file grifter_file
         end
       end
     end
 
     if @config[:authenticate]
-      self.hapi_authenticate_do
+      self.grifter_authenticate_do
     end
   end
 
   attr_reader :services
 
-  def load_hapi_file filename
+  def load_grifter_file filename
     Log.debug "Loading extension file '#{filename}'"
     code = IO.read(filename)
     anon_mod = Module.new
@@ -65,7 +65,7 @@ class Hapi
     anon_mod.class_eval(code, filename, 1)
     self.extend anon_mod
   end
-  alias :load_helper_file :load_hapi_file
+  alias :load_helper_file :load_grifter_file
 
   def run_script_file filename
     Log.info "Running data script '#{filename}'"
@@ -76,11 +76,11 @@ class Hapi
     anon_class.instance_eval(script, filename, 1)
   end
 
-  #calls all methods that end with hapi_authenticate
-  def hapi_authenticate_do
-    auth_methods = self.singleton_methods.select { |m| m =~ /hapi_authenticate$/ }
+  #calls all methods that end with grifter_authenticate
+  def grifter_authenticate_do
+    auth_methods = self.singleton_methods.select { |m| m =~ /grifter_authenticate$/ }
     auth_methods.each do |m|
-      Log.debug "Executing a hapi_authentication on method: #{m}"
+      Log.debug "Executing a grifter_authentication on method: #{m}"
       self.send(m)
     end
   end

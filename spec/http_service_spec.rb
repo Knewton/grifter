@@ -1,6 +1,6 @@
-require 'hapi/http_service'
+require 'grifter/http_service'
 
-describe Hapi::HTTPService do
+describe Grifter::HTTPService do
 
   let(:test_configuration) do
     {
@@ -13,7 +13,7 @@ describe Hapi::HTTPService do
   end
 
   before(:each) do
-    @svc = Hapi::HTTPService.new test_configuration
+    @svc = Grifter::HTTPService.new test_configuration
   end
 
   describe "http methods" do
@@ -59,7 +59,7 @@ describe Hapi::HTTPService do
     end
 
     it "should raise a RequestException when a 400 is returned" do
-      expect { @svc.get '/testing' }.to raise_error(Hapi::RequestException)
+      expect { @svc.get '/testing' }.to raise_error(Grifter::RequestException)
     end
   end
 end

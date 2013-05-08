@@ -1,7 +1,7 @@
 require 'base64'
 
 def twitter_keys
-  @_twitter_keys ||= YAML.load_file('example/twitter_hapis/oauth.yml')
+  @_twitter_keys ||= YAML.load_file('example/twitter_grifts/oauth.yml')
 end
 
 def application_authenticate
@@ -18,6 +18,6 @@ def application_authenticate
    true
 end
 
-def twitter_hapi_authenticate
+def twitter_grift
   application_authenticate
 end

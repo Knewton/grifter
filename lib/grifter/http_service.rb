@@ -3,10 +3,10 @@ require 'net/http'
 require_relative 'json_helpers'
 require_relative 'log'
 
-class Hapi
+class Grifter
   class HTTPService
 
-    include Hapi::JsonHelpers
+    include Grifter::JsonHelpers
 
     def initialize config
 

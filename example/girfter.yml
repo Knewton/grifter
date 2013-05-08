@@ -1,0 +1,7 @@
+#base configuration of services goes here
+services:
+  owm:
+    hostname: 'api.openweathermap.org'
+
+grift_globs:
+  - 'example/**/*_grifts.rb'

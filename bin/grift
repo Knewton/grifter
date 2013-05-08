@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-require_relative '../lib/hapi'
+require_relative '../lib/grifter'
 
-Log = Hapi::Log
+Log = Grifter::Log
 
 Log.level = Logger::INFO
 
@@ -11,16 +11,16 @@ Log.level = Logger::INFO
 def parse_cmd_line
   options = {
       files: [],
-      config_file: 'hapi.yml',
+      config_file: 'grifter.yml',
       authenticate: true,
       environment: nil,
   }
 
   optparse = OptionParser.new do |opts|
     opts.banner = %Q|
-      Hapi HTTP APIs Client
-      example, run a data script: bin/hapi.rb -f script.rb
-      example, call a method:     bin/hapi.rb <hapi method name>
+      Grifter HTTP JSON APIs Client
+      example, run a data script: bin/grifter -f script.rb
+      example, call a method:     bin/grifter <grift method name>
 
     |
 
@@ -45,16 +45,16 @@ def parse_cmd_line
 end
 options = parse_cmd_line
 
-hapi = Hapi.new options
+grifter = Grifter.new options
 
 if not(ARGV.empty?)
   method = ARGV.shift
-  response = hapi.send(method.to_sym, *ARGV)
+  response = grifter.send(method.to_sym, *ARGV)
   puts response.inspect
 
 elsif not(options[:files].empty?)
   options[:files].each do |script_file|
-    hapi.run_script_file(script_file)
+    grifter.run_script_file(script_file)
   end
 
 else

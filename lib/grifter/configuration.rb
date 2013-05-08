@@ -2,7 +2,7 @@ require 'yaml'
 
 require_relative 'log'
 
-class Hapi
+class Grifter
   module Configuration
     def recursive_symbolize hash
       hash.inject({}) do |h, (k,v)|
@@ -18,7 +18,7 @@ class Hapi
 
     def load_config_file options={}
       options = {
-        config_file: ENV['HAPI_CONFIG_FILE'] ? ENV['HAPI_CONFIG_FILE'] : 'hapi.yml'
+        config_file: ENV['GRIFTER_CONFIG_FILE'] ? ENV['GRIFTER_CONFIG_FILE'] : 'grifter.yml'
       }.merge(options)
       Log.debug "Loading config file '#{options[:config_file]}'"
       unless File.exist?(options[:config_file])
@@ -35,7 +35,7 @@ class Hapi
               (config.has_key? :services) &&
               (config[:services].is_a? Hash) &&
               (config[:services].length > 0))
-        raise HapiConfigurationError.new ":services block not found in configuration"
+        raise GrifterConfigurationError.new ":services block not found in configuration"
       end
 
       #fill out services block entirely for each service
@@ -69,7 +69,7 @@ class Hapi
       #merge any environment overrides into the service block
       if options[:environment]
         unless config[:environments] && config[:environments][options[:environment]]
-          raise HapiConfigurationError.new "No such environment specified in config: '#{options[:environment]}'"
+          raise GrifterConfigurationError.new "No such environment specified in config: '#{options[:environment]}'"
         end
 
         config[:environments][options[:environment]].each_pair do |service_name, service_overrides|
@@ -83,5 +83,5 @@ class Hapi
   end
 end
 
-class HapiConfigurationError < Exception
+class GrifterConfigurationError < Exception
 end

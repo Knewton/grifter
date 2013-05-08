@@ -1,8 +1,8 @@
-require 'hapi/json_helpers.rb'
+require 'grifter/json_helpers.rb'
 
-describe Hapi::JsonHelpers do
+describe Grifter::JsonHelpers do
 
-  let(:json_helper) { Class.new.extend(Hapi::JsonHelpers) }
+  let(:json_helper) { Class.new.extend(Grifter::JsonHelpers) }
 
   describe :jsonify do
     it "should turn a hash into json" do

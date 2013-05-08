@@ -1,16 +1,16 @@
 require 'logger'
 
-class Hapi
+class Grifter
   class Log
-    HapiFormatter = proc do |severity, datetime, progname, msg|
+    GrifterFormatter = proc do |severity, datetime, progname, msg|
       "#{severity[0]}: [#{datetime.strftime('%m/%d/%y %H:%M:%S')}][#{progname}] - #{msg}\n"
     end
 
     @@loggers = []
     def self.add_logger handle
       new_logger = Logger.new handle
-      new_logger.progname = 'hapi'
-      new_logger.formatter = HapiFormatter
+      new_logger.progname = 'grifter'
+      new_logger.formatter = GrifterFormatter
       @@loggers << new_logger
     end
 

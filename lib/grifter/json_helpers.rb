@@ -1,6 +1,6 @@
 require 'json'
 
-class Hapi
+class Grifter
   module JsonHelpers
 
     #always returns a string, intended for request bodies

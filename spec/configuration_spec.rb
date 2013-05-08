@@ -1,8 +1,8 @@
-require 'hapi/configuration'
+require 'grifter/configuration'
 
-describe Hapi::Configuration do
+describe Grifter::Configuration do
 
-  let(:configuration) { Class.new.extend(Hapi::Configuration) }
+  let(:configuration) { Class.new.extend(Grifter::Configuration) }
 
   let(:empty_config) { {} }
 
@@ -32,11 +32,11 @@ describe Hapi::Configuration do
 
   describe "Service configuration normalization" do
     it "should require a services block" do
-      expect { configuration.normalize_config empty_config }.to raise_error HapiConfigurationError
+      expect { configuration.normalize_config empty_config }.to raise_error GrifterConfigurationError
     end
 
     it "should require at least one service in service block" do
-      expect { configuration.normalize_config no_service_config }.to raise_error HapiConfigurationError
+      expect { configuration.normalize_config no_service_config }.to raise_error GrifterConfigurationError
     end
 
     it "should default ssl, ssl_certificate_ignore, and port" do
@@ -83,10 +83,10 @@ describe Hapi::Configuration do
     end
 
     it "should take the filename from an environment variable if specified" do
-      ENV['HAPI_CONFIG_FILE'] = 'spec/resources/example_config.yml'
+      ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/example_config.yml'
       config = configuration.load_config_file
       config[:services].keys.should =~ [:myapi, :myotherapi]
-      ENV['HAPI_CONFIG_FILE'] = nil
+      ENV['GRIFTER_CONFIG_FILE'] = nil
     end
   end
 

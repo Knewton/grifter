@@ -1,11 +1,11 @@
 require_relative 'log'
 
-class Hapi
+class Grifter
   module Helpers
     def self.included(mod)
       Log.debug "initializing helpers in #{mod}"
-      def hapi
-        @_hapi ||= Hapi.new
+      def grifter
+        @_grifter ||= Grifter.new
       end
     end
   end
