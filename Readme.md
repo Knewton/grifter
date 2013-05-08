@@ -83,3 +83,8 @@ And get this nice output:
     Tokyo, Japan: 16 celcius
     Sydney, Australia: 14 celcius
 
+
+== Copyright
+
+Copyright (c) 2013 Robert Schultheis. See LICENSE.txt for
+further details.

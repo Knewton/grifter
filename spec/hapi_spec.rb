@@ -19,6 +19,15 @@ describe Hapi do
       hapi = Hapi.new :config_file => 'spec/resources/hapi.yml'
       hapi.should respond_to :timeline_for
     end
+
+    describe "syntax errors" do
+      it "should produce a nice stack trace if a hapi file has a syntax error" do
+        expect do
+          hapi = Hapi.new load_from_config_file: false,
+            hapi_globs: ['spec/resources/syntax_error_hapis/eval_error_hapis.rb']
+        end.to raise_error NoMethodError
+      end
+    end
   end
 
   describe "Authentication" do

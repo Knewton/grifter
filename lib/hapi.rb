@@ -10,11 +10,17 @@ class Hapi
     #TODO: service_config: nil,
     hapi_globs: ['*_hapis/**/*_hapis.rb'],
     authenticate: false,
+    load_from_config_file: true,
+    services: {},
   }
   def initialize options={}
     options = DefaultConfigOptions.merge(options)
 
-    @config = options.merge load_config_file(options)
+    @config = if options[:load_from_config_file]
+                options.merge load_config_file(options)
+              else
+                options
+              end
 
     #setup the services
     @services = []
@@ -56,9 +62,8 @@ class Hapi
     code = IO.read(filename)
     anon_mod = Module.new
     #by evaling in a anonymous module, we protect this class's namespace
-    anon_mod.class_eval(code)
+    anon_mod.class_eval(code, filename, 1)
     self.extend anon_mod
-
   end
   alias :load_helper_file :load_hapi_file
 
@@ -68,7 +73,7 @@ class Hapi
     script = IO.read(filename)
     #by running in a anonymous class, we protect this class's namespace
     anon_class = BlankSlate.new(self)
-    anon_class.instance_eval(script)
+    anon_class.instance_eval(script, filename, 1)
   end
 
   #calls all methods that end with hapi_authenticate
