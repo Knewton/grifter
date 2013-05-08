@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "hapi"
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Schultheis"]
@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
   s.files = [
     ".rspec",
     "Gemfile",
+    "LICENSE.txt",
+    "Rakefile",
     "Readme.md",
     "VERSION",
     "bin/hapi",
@@ -39,6 +41,7 @@ Gem::Specification.new do |s|
     "spec/json_helpers_spec.rb",
     "spec/resources/example_config.yml",
     "spec/resources/hapi.yml",
+    "spec/resources/syntax_error_hapis/eval_error_hapis.rb",
     "spec/resources/twitter_hapis/oauth_hapis.rb",
     "spec/resources/twitter_hapis/timeline_hapis.rb",
     "spec/rspec_helper_spec.rb",
