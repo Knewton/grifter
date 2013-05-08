@@ -8,7 +8,7 @@ class Grifter
 
   DefaultConfigOptions = {
     #TODO: service_config: nil,
-    grifter_globs: ['*_grifts/**/*_grifts.rb'],
+    grift_globs: ['*_grifts/**/*_grifts.rb'],
     authenticate: false,
     load_from_config_file: true,
     services: {},
@@ -42,8 +42,8 @@ class Grifter
     end
 
     #setup the grifter methods if any
-    if @config[:grifter_globs]
-      @config[:grifter_globs].each do |glob|
+    if @config[:grift_globs]
+      @config[:grift_globs].each do |glob|
         Dir[glob].each do |grifter_file|
           load_grifter_file grifter_file
         end

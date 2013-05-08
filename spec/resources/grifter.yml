@@ -7,5 +7,5 @@ services:
     ignore_ssl_cert: false
     base_uri: '/1.1'
 
-grifter_globs:
+grift_globs:
   - 'spec/resources/twitter_grifts/**/*_grifts.rb'

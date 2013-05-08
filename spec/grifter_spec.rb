@@ -24,7 +24,7 @@ describe Grifter do
       it "should produce a nice stack trace if a grifter file has a syntax error" do
         expect do
           grifter = Grifter.new load_from_config_file: false,
-            grifter_globs: ['spec/resources/syntax_error_grifts/eval_error_grifts.rb']
+            grift_globs: ['spec/resources/syntax_error_grifts/eval_error_grifts.rb']
         end.to raise_error NoMethodError
       end
     end
