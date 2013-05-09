@@ -15,7 +15,6 @@ class Grifter
   }
   def initialize options={}
     options = DefaultConfigOptions.merge(options)
-
     @config = if options[:load_from_config_file]
                 options.merge load_config_file(options)
               else
@@ -50,20 +49,18 @@ class Grifter
 
   def load_grifter_file filename
     Log.debug "Loading extension file '#{filename}'"
-    code = IO.read(filename)
     anon_mod = Module.new
     #by evaling in a anonymous module, we protect this class's namespace
-    anon_mod.class_eval(code, filename, 1)
+    anon_mod.class_eval(IO.read(filename), filename, 1)
     self.extend anon_mod
   end
 
   def run_script_file filename
     Log.info "Running data script '#{filename}'"
     raise "No such file '#{filename}'" unless File.exist? filename
-    script = IO.read(filename)
     #by running in a anonymous class, we protect this class's namespace
     anon_class = BlankSlate.new(self)
-    anon_class.instance_eval(script, filename, 1)
+    anon_class.instance_eval(IO.read(filename), filename, 1)
   end
 
   #calls all methods that end with grifter_authenticate

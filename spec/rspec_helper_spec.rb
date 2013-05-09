@@ -14,9 +14,17 @@ describe Grifter::Helpers do
       end
 
       cla.should respond_to :grifter
-      cla.grifter.should be_a Grifter
 
-      p cla.grifter.should respond_to :timeline_for
+      #should return the grifter instance if requested
+      cla.grifter.should be_a Grifter
+      cla.grifter.should respond_to :timeline_for
+
+      #but better, all grift methods are just available as is
+      cla.should respond_to :timeline_for
+
+      #the raw services should be available
+      cla.should respond_to :twitter
+      cla.twitter.should respond_to :get
     end
   end
 end
