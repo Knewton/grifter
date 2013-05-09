@@ -62,4 +62,20 @@ describe Grifter::HTTPService do
       expect { @svc.get '/testing' }.to raise_error(Grifter::RequestException)
     end
   end
+
+  describe "default header configuration" do
+    it "should specification of default headers" do
+      svc = Grifter::HTTPService.new test_configuration.merge default_headers: { 'abc' => '123' }
+      response = Net::HTTPOK.new('1.1', 200, "stub response body")
+      response.stub(:body).and_return '{"foo": "bar"}'
+      svc.http.stub!(:request).and_return(response)
+
+      svc.http.should_receive(:request).with do |req|
+        req['abc'].should eql('123')
+      end
+
+      svc.get '/hello'
+
+    end
+  end
 end

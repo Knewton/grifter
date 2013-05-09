@@ -24,12 +24,18 @@ class Grifter
         'accept' => 'application/json',
         'content-type' => 'application/json',
       }
+      if @config[:default_headers]
+        Log.debug "Default headers configured: " + @config[:default_headers].inspect
+        @config[:default_headers].each_pair do |k, v|
+          @headers[k.to_s] = v.to_s
+        end
+      end
     end
 
     #allow stubbing http if we are testing
     attr_reader :http if defined?(RSpec)
 
-    attr_reader :headers, :name
+    attr_reader :headers, :name, :config
 
     #this is useful for testing apis, and other times
     #you want to interrogate the http details of a response
