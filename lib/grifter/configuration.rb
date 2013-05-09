@@ -18,7 +18,8 @@ class Grifter
 
     def load_config_file options={}
       options = {
-        config_file: ENV['GRIFTER_CONFIG_FILE'] ? ENV['GRIFTER_CONFIG_FILE'] : 'grifter.yml'
+        config_file: ENV['GRIFTER_CONFIG_FILE'] ? ENV['GRIFTER_CONFIG_FILE'] : 'grifter.yml',
+        environment: ENV['GRIFTER_ENVIRONMENT'],
       }.merge(options)
       Log.debug "Loading config file '#{options[:config_file]}'"
       unless File.exist?(options[:config_file])
@@ -68,6 +69,7 @@ class Grifter
 
       #merge any environment overrides into the service block
       if options[:environment]
+        options[:environment] = options[:environment].to_sym
         unless config[:environments] && config[:environments][options[:environment]]
           raise GrifterConfigurationError.new "No such environment specified in config: '#{options[:environment]}'"
         end

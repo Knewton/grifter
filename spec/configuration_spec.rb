@@ -114,5 +114,14 @@ describe Grifter::Configuration do
       })
 
     end
+
+    it "should allow setting environment via an environment variable" do
+      ENV['GRIFTER_ENVIRONMENT'] = 'dev'
+      config = configuration.load_config_file config_file: 'spec/resources/example_config.yml'
+
+      config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
+      ENV['GRIFTER_ENVIRONMENT'] = nil
+
+    end
   end
 end
