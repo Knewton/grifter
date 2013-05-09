@@ -51,7 +51,10 @@ class Grifter
     Log.debug "Loading extension file '#{filename}'"
     anon_mod = Module.new
     #by evaling in a anonymous module, we protect this class's namespace
+    load_dir = File.dirname(filename)
+    $: << load_dir
     anon_mod.class_eval(IO.read(filename), filename, 1)
+    $:.pop
     self.extend anon_mod
   end
 
