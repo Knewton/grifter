@@ -4,12 +4,12 @@ Grifter makes it smooth to work with JSON HTTP APIs with confidence
 
 Features
 --------
-- Command line calls to API(s)
-- Support for multiple environments (Dev, Staging, Production)
+- Work with multiple APIs
+- Work with multiple deployment environments (Staging, Production, etc.)
 - Script calls to API(s)
-- Simplify complex interactions within/across APIs into simple method calls
-- Unified approach to handling request errors
+- Command line calls to API(s)
 - Craft clean API tests using the included RSPec helper
+- Unified approach to handling request errors
 - Convention over configuration approach to defining the API interface
 
 Getting Started
@@ -31,7 +31,7 @@ which is accessible without needing any authentication key:
 
      services:
        owm:
-         hostname: 'http://api.openweathermap.org'
+         hostname: api.openweathermap.org
 
 ### make the grifts directory, and a grift file
 
@@ -80,8 +80,40 @@ And get this nice output:
     Tokyo, Japan: 16 celcius
     Sydney, Australia: 14 celcius
 
+### Test it
+Using the included helper module, testing an api becomes easy.  Lets setup a simple RSpec example.  Step one is create the spec folder:
 
-== Copyright
+    mkdir spec
 
-Copyright (c) 2013 Robert Schultheis. See LICENSE.txt for
+Setup spec/spec_helper.rb with contents like:
+
+    require 'grifter/helpers'
+
+    RSpec.configure do |config|
+      config.include Grifter::Helpers
+    end
+
+Setup spec/weather_spec.rb with contents like:
+
+    require 'spec_helper'
+    describe "getting weather reports" do
+      it "should know the weather for New York City" do
+        response = weather_for 'New York, NY'
+        response['main'].keys.should =~ ['temp', 'temp_min', 'temp_max', 'humidity', 'pressure']
+      end
+    end
+
+Run it:
+
+    gem install rspec
+    rspec
+
+And get back:
+
+    1 example, 0 failures
+
+
+Copyright
+---------
+Copyright (c) 2013 Knewton. See LICENSE.txt for
 further details.
