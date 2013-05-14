@@ -49,12 +49,11 @@ class Grifter
 
   def load_grifter_file filename
     Log.debug "Loading extension file '#{filename}'"
-    anon_mod = Module.new
     #by evaling in a anonymous module, we protect this class's namespace
-    load_dir = File.dirname(filename)
-    $: << load_dir
-    anon_mod.class_eval(IO.read(filename), filename, 1)
-    $:.pop
+    anon_mod = Module.new
+    with_local_load_path File.dirname(filename) do
+      anon_mod.class_eval(IO.read(filename), filename, 1)
+    end
     self.extend anon_mod
   end
 
@@ -63,7 +62,9 @@ class Grifter
     raise "No such file '#{filename}'" unless File.exist? filename
     #by running in a anonymous class, we protect this class's namespace
     anon_class = BlankSlate.new(self)
-    anon_class.instance_eval(IO.read(filename), filename, 1)
+    with_local_load_path File.dirname(filename) do
+      anon_class.instance_eval(IO.read(filename), filename, 1)
+    end
   end
 
   #calls all methods that end with grifter_authenticate
@@ -73,5 +74,15 @@ class Grifter
       Log.debug "Executing a grifter_authentication on method: #{m}"
       self.send(m)
     end
+  end
+
+private
+  def with_local_load_path load_path, &block
+    $: << load_path
+    rtn = yield block
+    #delete only the first occurrence, in case something else if changing load path too
+    idx = $:.index(load_path)
+    $:.delete_at(idx) if idx
+    rtn
   end
 end
