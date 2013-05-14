@@ -18,7 +18,6 @@ class Grifter
     rescue Exception
       obj.to_s
     end
-    #module_function :jsonify
 
     #attempts to parse json strings into native ruby objects
     def objectify json_string
@@ -32,7 +31,6 @@ class Grifter
       Log.debug "Unable to parse non-json object: #{e.to_s}"
       json_string
     end
-    #module_function :objectify
 
   end
 end

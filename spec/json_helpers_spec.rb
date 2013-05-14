@@ -50,4 +50,28 @@ describe Grifter::JsonHelpers do
     end
 
   end
+
+  describe :objectify do
+    it "should turn a json map string into a Hash" do
+      hsh = {'str' => 'abc', 'int' => 123, 'dec' => 12.34, 'bool' => true}
+      json = JSON.generate hsh
+      json_helper.objectify(json).should eql hsh
+    end
+
+    it "turn a json array string into an Array" do
+      arr = [1, 2.34, 'three', true]
+      json = JSON.generate arr
+      json_helper.objectify(json).should =~ arr
+    end
+
+    it "should return a non-string object as itself" do
+      obj = 12.34
+      json_helper.objectify(obj).should eql obj
+    end
+
+    it "should return a non-json string as itself" do
+      str = 'abc;123'
+      json_helper.objectify(str).should eql str
+    end
+  end
 end
