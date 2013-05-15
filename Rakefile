@@ -21,6 +21,15 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{convention based approach to interfacing with an HTTP JSON API.}
   gem.email = "rob@knewton.com"
   gem.authors = ["Robert Schultheis"]
+  gem.files = [
+    'lib/**/*',
+    'bin/**/*',
+    'Readme.md',
+    'LICENSE.txt',
+    'Gemfile',
+    'Gemfile.lock',
+    'grifter.gemspec',
+  ]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new

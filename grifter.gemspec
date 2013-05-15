@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Schultheis"]
-  s.date = "2013-05-14"
+  s.date = "2013-05-15"
   s.description = "convention based approach to interfacing with an HTTP JSON API."
   s.email = "rob@knewton.com"
   s.executables = ["grift"]
@@ -18,14 +18,10 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
-    "Rakefile",
     "Readme.md",
-    "VERSION",
     "bin/grift",
-    "example/grifter.yml",
-    "example/owm_grifts/weather_grifts.rb",
-    "example/temperatures.rb",
     "grifter.gemspec",
     "lib/grifter.rb",
     "lib/grifter/blankslate.rb",
@@ -33,19 +29,7 @@ Gem::Specification.new do |s|
     "lib/grifter/helpers.rb",
     "lib/grifter/http_service.rb",
     "lib/grifter/json_helpers.rb",
-    "lib/grifter/log.rb",
-    "spec/configuration_spec.rb",
-    "spec/grifter_spec.rb",
-    "spec/http_service_spec.rb",
-    "spec/json_helpers_spec.rb",
-    "spec/resources/example_config.yml",
-    "spec/resources/grifter.yml",
-    "spec/resources/syntax_error_grifts/eval_error_grifts.rb",
-    "spec/resources/twitter_grifts/oauth_grifts.rb",
-    "spec/resources/twitter_grifts/timeline_grifts.rb",
-    "spec/rspec_helper_spec.rb",
-    "spec/support/require_all_lib_files.rb",
-    "spec/support/spec_helper.rb"
+    "lib/grifter/log.rb"
   ]
   s.homepage = "http://github.com/knewton/grifter"
   s.licenses = ["MIT"]

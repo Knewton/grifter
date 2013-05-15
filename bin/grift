@@ -27,8 +27,14 @@ def parse_cmd_line
     opts.on("-f", "--script=FILENAME",
       "specify a script file to run") { |file| options[:files] << file }
 
+    opts.on("-d", "--script-dir=dir",
+      "specify a directory of grift scripts, run all of them") { |dir| options[:files] += Dir["#{dir}/**/*.rb"] }
+
     opts.on("-v", "--verbose",
-      "enable debug logging") { Log.level = Logger::DEBUG }
+      "debug logging, see every request and response in detail") { Log.level = Logger::DEBUG }
+
+    opts.on("-q", "--verbose",
+      "quiet logging, warnings and errors only") { Log.level = Logger::WARN }
 
     opts.on("-c", "--config=FILENAME",
       "config filename") { |fn| options[:config_file] = fn }
@@ -36,7 +42,7 @@ def parse_cmd_line
     opts.on('-e', '--environment=ENVIRONMENT',
            "environment name") { |e| options[:environment] = e.to_sym }
 
-    opts.on("-d", "--no_authenticate",
+    opts.on("-n", "--no_authenticate",
            "Do not authenticate") { options[:authenticate] = false }
 
   end
@@ -47,12 +53,15 @@ options = parse_cmd_line
 
 grifter = Grifter.new options
 
+
 if not(ARGV.empty?)
+  #a grift method has been specified on the command line
   method = ARGV.shift
   response = grifter.send(method.to_sym, *ARGV)
   puts response.inspect
 
 elsif not(options[:files].empty?)
+  #some grift files were specified on the command line?
   options[:files].each do |script_file|
     grifter.run_script_file(script_file)
   end
