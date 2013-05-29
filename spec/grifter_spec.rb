@@ -12,6 +12,13 @@ describe Grifter do
       grifter.myotherapi.name.should eql('myotherapi')
       grifter.services.any?{|s| s.name == 'myotherapi' }.should be_true
     end
+
+    it "should allow access to reading it's configuration" do
+      grifter = Grifter.new :config_file => 'spec/resources/example_config.yml'
+      grifter.should respond_to(:grifter_configuration)
+      grifter.grifter_configuration.should be_a Hash
+      grifter.grifter_configuration.keys.should =~ [:grift_globs, :authenticate, :load_from_config_file, :services, :config_file, :environments]
+    end
   end
 
   describe "Grifter files" do

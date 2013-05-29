@@ -47,6 +47,11 @@ class Grifter
 
   attr_reader :services
 
+  #this allows configuration to be accessed in grift scripts
+  def grifter_configuration
+    @config.clone
+  end
+
   def load_grifter_file filename
     Log.debug "Loading extension file '#{filename}'"
     #by evaling in a anonymous module, we protect this class's namespace
