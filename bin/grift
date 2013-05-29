@@ -33,7 +33,7 @@ def parse_cmd_line
     opts.on("-v", "--verbose",
       "debug logging, see every request and response in detail") { Log.level = Logger::DEBUG }
 
-    opts.on("-q", "--verbose",
+    opts.on("-q", "--quiet",
       "quiet logging, warnings and errors only") { Log.level = Logger::WARN }
 
     opts.on("-c", "--config=FILENAME",
@@ -42,7 +42,7 @@ def parse_cmd_line
     opts.on('-e', '--environment=ENVIRONMENT',
            "environment name") { |e| options[:environment] = e.to_sym }
 
-    opts.on("-n", "--no_authenticate",
+    opts.on("-n", "--no-authenticate",
            "Do not authenticate") { options[:authenticate] = false }
 
   end
