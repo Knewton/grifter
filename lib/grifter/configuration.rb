@@ -69,16 +69,17 @@ class Grifter
 
       #merge any environment overrides into the service block
       if options[:environment]
-        options[:environment] = options[:environment].to_sym
-        unless config[:environments] && config[:environments][options[:environment]]
-          raise GrifterConfigurationError.new "No such environment specified in config: '#{options[:environment]}'"
+        config[:environment] = options[:environment].to_sym
+        unless config[:environments] && config[:environments][config[:environment]]
+          raise GrifterConfigurationError.new "No such environment specified in config: '#{config[:environment]}'"
         end
 
-        config[:environments][options[:environment]].each_pair do |service_name, service_overrides|
+        config[:environments][config[:environment]].each_pair do |service_name, service_overrides|
           config[:services][service_name].merge! service_overrides
         end
+      else
+        config[:environment] = :undefined
       end
-
 
       return config
     end

@@ -17,7 +17,7 @@ describe Grifter do
       grifter = Grifter.new :config_file => 'spec/resources/example_config.yml'
       grifter.should respond_to(:grifter_configuration)
       grifter.grifter_configuration.should be_a Hash
-      grifter.grifter_configuration.keys.should =~ [:grift_globs, :authenticate, :load_from_config_file, :services, :config_file, :environments]
+      grifter.grifter_configuration.keys.should =~ [:grift_globs, :authenticate, :load_from_config_file, :services, :config_file, :environments, :environment]
     end
   end
 
