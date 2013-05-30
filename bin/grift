@@ -13,7 +13,8 @@ def parse_cmd_line
       files: [],
       config_file: 'grifter.yml',
       authenticate: true,
-      environment: nil,
+      #by leaving environment unset, grift will use GRIFTER_ENVIRONMENT variable if no -e is used on cmd line
+      #environment: nil,
   }
 
   optparse = OptionParser.new do |opts|
