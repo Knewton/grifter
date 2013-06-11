@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "grifter"
-  s.version = "0.0.8"
+  s.version = "0.0.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Schultheis"]
-  s.date = "2013-05-29"
+  s.date = "2013-06-11"
   s.description = "convention based approach to interfacing with an HTTP JSON API."
   s.email = "rob@knewton.com"
   s.executables = ["grift"]
