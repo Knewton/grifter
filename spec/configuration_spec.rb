@@ -88,6 +88,13 @@ describe Grifter::Configuration do
       config[:services].keys.should =~ [:myapi, :myotherapi]
       ENV['GRIFTER_CONFIG_FILE'] = nil
     end
+
+    it "should raise a custom exception if config file does not exist" do
+      #this allows the cmd line utility to give good feedback
+      expect {
+        configuration.load_config_file config_file: 'completely_fake_path.yml'
+      }.to raise_error GrifterConfigFileMissing
+    end
   end
 
   describe "environment based overriding" do

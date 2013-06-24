@@ -23,7 +23,7 @@ class Grifter
       }.merge(options)
       Log.debug "Loading config file '#{options[:config_file]}'"
       unless File.exist?(options[:config_file])
-        raise "No such config file: '#{options[:config_file]}'"
+        raise GrifterConfigFileMissing.new "No such config file: '#{options[:config_file]}'"
       end
       hash = YAML.load_file(options[:config_file])
       symbolized = recursive_symbolize(hash)
@@ -93,4 +93,7 @@ class Grifter
 end
 
 class GrifterConfigurationError < Exception
+end
+
+class GrifterConfigFileMissing < Exception
 end

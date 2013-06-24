@@ -52,8 +52,19 @@ def parse_cmd_line
 end
 options = parse_cmd_line
 
-grifter = Grifter.new options
+begin
+  grifter = Grifter.new options
+rescue GrifterConfigFileMissing => e
+  Log.error e.message
+  Log.error <<-MSG
+  \n
+  Either use -c to specify the location of your grifter config file,
+  or create a file called grifter.yml in the current directory.
 
+  Review documentation on configuration here: https://github.com/Knewton/grifter/wiki/grifter.yml-configuration
+  MSG
+  Kernel.abort
+end
 
 if not(ARGV.empty?)
   #a grift method has been specified on the command line
