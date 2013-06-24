@@ -81,6 +81,12 @@ class Grifter
         config[:environment] = :undefined
       end
 
+      #join the grift globs with the relative path to config file
+      if config[:grift_globs] && options[:config_file]
+        config_file_dir = File.dirname options[:config_file]
+        config[:grift_globs].map! {|glob| config_file_dir + '/' + glob.sub(/^\//,'')}
+      end
+
       return config
     end
   end

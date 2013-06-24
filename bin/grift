@@ -59,7 +59,7 @@ if not(ARGV.empty?)
   #a grift method has been specified on the command line
   method = ARGV.shift
   response = grifter.send(method.to_sym, *ARGV)
-  puts response.inspect
+  Log.info "Grift method #{method} returned:\n" + response.inspect
 
 elsif not(options[:files].empty?)
   #some grift files were specified on the command line?

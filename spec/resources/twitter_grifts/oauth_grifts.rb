@@ -1,7 +1,11 @@
 require 'base64'
 
 def twitter_keys
-  @_twitter_keys ||= YAML.load_file('example/twitter_grifts/oauth.yml')
+  unless @_twitter_keys
+    key_file_path = File.join(File.dirname(__FILE__), 'oauth.yml')
+    @_twitter_keys = YAML.load_file(key_file_path)
+  end
+  @_twitter_keys
 end
 
 def application_authenticate
@@ -18,6 +22,6 @@ def application_authenticate
    true
 end
 
-def twitter_grift
+def twitter_grifter_authenticate
   application_authenticate
 end
