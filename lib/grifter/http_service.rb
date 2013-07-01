@@ -94,6 +94,11 @@ class Grifter
       do_request req
     end
 
+    def options path, options={}
+      req = Net::HTTP::Options.new(*req_args(path, options))
+      do_request req
+    end
+
     def delete path, options={}
       req = Net::HTTP::Delete.new(*req_args(path, options))
       do_request req
@@ -107,6 +112,12 @@ class Grifter
 
     def put path, obj, options={}
       req = Net::HTTP::Put.new(*req_args(path, options))
+      req.body = jsonify(obj)
+      do_request req
+    end
+
+    def patch path, obj, options={}
+      req = Net::HTTP::Patch.new(*req_args(path, options))
       req.body = jsonify(obj)
       do_request req
     end

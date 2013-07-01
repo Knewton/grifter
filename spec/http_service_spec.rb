@@ -27,6 +27,7 @@ describe Grifter::HTTPService do
     [
       :get,
       :head,
+      :options,
       :delete,
     ].each do |method|
       it "should have a #{method.to_s} method" do
@@ -38,6 +39,7 @@ describe Grifter::HTTPService do
     [
       :put,
       :post,
+      :patch,
     ].each do |method|
       it "should have a #{method.to_s} method" do
         @svc.send(method, '/testing', {'a_key' => 'a_value'}).should be_a Hash
