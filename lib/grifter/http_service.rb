@@ -125,7 +125,6 @@ class Grifter
     def post_form path, params, options={}
       request_obj = Net::HTTP::Post.new(*req_args(path, options))
       request_obj.set_form_data params
-      request_obj.basic_auth(options[:username], options[:password]) if options[:username]
       do_request request_obj
     end
   end
