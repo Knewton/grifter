@@ -51,6 +51,13 @@ describe Grifter::HTTPService do
         @svc.last_request.should be_a Net::HTTP::Post
         @svc.last_response.should be_a Net::HTTPOK
     end
+
+    it "should support a timeout option for overriding timeout for a single request" do
+      @svc.http.should_receive(:read_timeout=).with(3)
+      @svc.http.should_receive(:read_timeout=).with(60)
+      @svc.get '/testing', timeout: 3
+      @svc.http.read_timeout.should eql 60
+    end
   end
 
   describe "error handling" do
@@ -62,6 +69,18 @@ describe Grifter::HTTPService do
 
     it "should raise a RequestException when a 400 is returned" do
       expect { @svc.get '/testing' }.to raise_error(Grifter::RequestException)
+    end
+  end
+
+  describe "default timeout configuration for the service" do
+    it "should set read_timeout for the http service based on timeout option" do
+      timeout_cfg = test_configuration.merge timeout: 2
+      new_svc = Grifter::HTTPService.new timeout_cfg
+      new_svc.http.read_timeout.should eql 2
+    end
+
+    it "should have 60 seconds by default" do
+      @svc.http.read_timeout.should eql 60
     end
   end
 

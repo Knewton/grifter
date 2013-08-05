@@ -19,6 +19,8 @@ class Grifter
       @http = Net::HTTP.new(@config[:hostname], @config[:port])
       @http.use_ssl = @config[:ssl]
       @http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @config[:ignore_ssl_cert]
+      @http.read_timeout = @config[:timeout] if @config[:timeout]
+      p @config
 
       @headers = {
         'accept' => 'application/json',
@@ -42,12 +44,29 @@ class Grifter
     attr_reader :last_request, :last_response
 
     RequestLogSeperator = '-'*40
-    def do_request req
+
+    # do_request performs the actual request, and does associated logging
+    # options can include:
+    # - :timeout, which specifies num secs the request should timeout in
+    #   (this turns out to be kind of annoying to implement)
+    def do_request req, options={}
       Log.debug RequestLogSeperator
       Log.debug "#{req.class} #{req.path}"
       Log.debug "HEADERS: #{req.to_hash}"
       Log.debug "BODY:\n#{req.body}" if req.request_body_permitted?
+
+      if options.has_key? :timeout
+        cur_timeout = @http.read_timeout
+        Log.debug "Overriding timeout to: #{options[:timeout]}"
+        @http.read_timeout = options[:timeout]
+      end
+
       response = @http.request(req)
+
+      if cur_timeout
+        @http.read_timeout = cur_timeout
+      end
+
       Log.debug "RESPONSE CODE: #{response.code}"
       Log.debug "RESPONSE HEADERS: #{response.to_hash}"
       Log.debug "RESPONSE BODY:\n#{jsonify response.body}\n"
@@ -86,46 +105,46 @@ class Grifter
 
     def get path, options={}
       req = Net::HTTP::Get.new(*req_args(path, options))
-      do_request req
+      do_request req, options
     end
 
     def head path, options={}
       req = Net::HTTP::Head.new(*req_args(path, options))
-      do_request req
+      do_request req, options
     end
 
     def options path, options={}
       req = Net::HTTP::Options.new(*req_args(path, options))
-      do_request req
+      do_request req, options
     end
 
     def delete path, options={}
       req = Net::HTTP::Delete.new(*req_args(path, options))
-      do_request req
+      do_request req, options
     end
 
     def post path, obj, options={}
       req = Net::HTTP::Post.new(*req_args(path, options))
       req.body = jsonify(obj)
-      do_request req
+      do_request req, options
     end
 
     def put path, obj, options={}
       req = Net::HTTP::Put.new(*req_args(path, options))
       req.body = jsonify(obj)
-      do_request req
+      do_request req, options
     end
 
     def patch path, obj, options={}
       req = Net::HTTP::Patch.new(*req_args(path, options))
       req.body = jsonify(obj)
-      do_request req
+      do_request req, options
     end
 
     def post_form path, params, options={}
       request_obj = Net::HTTP::Post.new(*req_args(path, options))
       request_obj.set_form_data params
-      do_request request_obj
+      do_request request_obj, options
     end
   end
 
