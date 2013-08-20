@@ -20,7 +20,6 @@ class Grifter
       @http.use_ssl = @config[:ssl]
       @http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @config[:ignore_ssl_cert]
       @http.read_timeout = @config[:timeout] if @config[:timeout]
-      p @config
 
       @headers = {
         'accept' => 'application/json',
