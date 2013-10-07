@@ -1,4 +1,5 @@
 require 'net/http'
+require 'openssl'
 
 require_relative 'json_helpers'
 require_relative 'log'
