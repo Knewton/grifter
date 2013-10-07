@@ -2,6 +2,25 @@ Grifter
 =======
 Grifter makes it smooth to work with JSON HTTP APIs with confidence
 
+Intro
+--------
+Grifter allows creating a DSL for working with any HTTP JSON RESTy API.
+You can GET, POST and otherwise interact with any set of APIs through
+high level methods you define, allowing your code to ignore all the
+details around the mechanics of connecting to the API, executing the
+request, and turning JSON into native ruby objects.
+
+Using grifter gets you for free:
+- a cmd line interface for your json http apis
+- a ruby scripting language for interacting with your json http apis
+- An object you can use in any kind of ruby program for easily sending
+  API requests
+- An RSpec Helper that makes testing Rest APIs painless
+
+Grifter relies heavily on the 'convention over configuration' approach,
+which means for less code, you get more.
+
+
 Features
 --------
 - Work with multiple APIs
