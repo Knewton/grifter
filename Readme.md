@@ -57,7 +57,7 @@ which is accessible without needing any authentication key:
     mkdir owm_grifts
     touch owm_grifts/weather_grifts.rb
 
-### add method for checking weather to owm/weather.rb
+### add method for checking weather to owm_grifts/weather.rb
     def weather_for city
       owm.get "/data/2.5/weather?q=#{URI.encode(city)}"
     end
@@ -118,7 +118,8 @@ Setup spec/weather_spec.rb with contents like:
     describe "getting weather reports" do
       it "should know the weather for New York City" do
         response = weather_for 'New York, NY'
-        response['main'].keys.should =~ ['temp', 'temp_min', 'temp_max', 'humidity', 'pressure']
+        expected_items = ['temp', 'temp_min', 'temp_max', 'humidity', 'pressure']
+        response['main'].keys.should include(*expected_items) 
       end
     end
 
