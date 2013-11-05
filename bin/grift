@@ -46,6 +46,11 @@ def parse_cmd_line
     opts.on("-n", "--no-authenticate",
            "Do not authenticate") { options[:authenticate] = false }
 
+    opts.on('-l', "--list", "Print each available grift method") do
+      options[:list_grift_methods] = true
+      options[:authenticate] = false #no point in authenticating for --list
+    end
+
   end
   optparse.parse!
   options
@@ -64,6 +69,17 @@ rescue GrifterConfigFileMissing => e
   Review documentation on configuration here: https://github.com/Knewton/grifter/wiki/grifter.yml-configuration
   MSG
   Kernel.abort
+end
+
+if options[:list_grift_methods]
+  puts "Grift method listing"
+
+  grifter.singleton_methods.sort.each do |meth|
+    puts " - #{meth}(#{grifter.method(meth).parameters.join(', ')})"
+
+  end
+
+  exit
 end
 
 if not(ARGV.empty?)
