@@ -1,4 +1,5 @@
 require 'yaml'
+require 'uri'
 
 require_relative 'log'
 
@@ -14,6 +15,20 @@ class Grifter
                       end
         h
       end
+    end
+
+    def get_service_config_from_url url
+      return {} if url.nil?
+      unless url =~ URI::ABS_URI
+        raise GrifterConfigurationError.new "url is not a proper aboslute URL: #{url}"
+      end
+      parsed = URI.parse url
+      {
+        :hostname => parsed.host,
+        :port => parsed.port,
+        :base_uri => parsed.path,
+        :ssl => (parsed.scheme == 'https'),
+      }
     end
 
     def load_config_file options={}
@@ -42,28 +57,17 @@ class Grifter
       #fill out services block entirely for each service
       config[:services].each_pair do |service_name, service_config|
         service_config[:name] = service_name.to_s
-       #setup port config
-       unless service_config[:port]
-         if service_config[:ssl]
-           service_config[:port] = 443
-         else
-          service_config[:port] = 80
-         end
-       end
 
-       #ssl config
-       unless service_config[:ssl]
-         service_config[:ssl] = false
-       end
+        #check for a url configuration option. This option will trump any others that may be set
+        service_config.merge!(get_service_config_from_url(service_config.delete(:url)))
 
-       #ignore_ssl_certificate
-       unless service_config[:ignore_ssl_cert]
-         service_config[:ignore_ssl_cert] = false
-       end
-
-       unless service_config[:base_uri]
-         service_config[:base_uri] = ''
-       end
+        #default everything that is not defined
+        service_config.merge!({
+          ssl: false,
+          ignore_ssl_cert: false,
+          base_uri: '',
+          port: (service_config[:ssl] == true ? 443 : 80),
+        }.merge(service_config))
 
       end
 
@@ -75,10 +79,20 @@ class Grifter
         end
 
         config[:environments][config[:environment]].each_pair do |service_name, service_overrides|
+          service_overrides.merge!(get_service_config_from_url(service_overrides.delete(:url)))
           config[:services][service_name].merge! service_overrides
         end
       else
         config[:environment] = :undefined
+      end
+
+      #merge any overrides provided via a GRIFTER_<svc name>_URL environment variable
+      config[:services].each_pair do |service_name, service_config|
+        env_var_name = "GRIFTER_#{service_config[:name].upcase}_URL"
+        if ENV[env_var_name]
+          Log.warn "Environment variable #{env_var_name} is defined, using it to override configuration"
+          service_config.merge!(get_service_config_from_url(ENV[env_var_name]))
+        end
       end
 
       #join the grift globs with the relative path to config file

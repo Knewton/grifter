@@ -6,9 +6,9 @@ describe Grifter::Configuration do
 
   let(:empty_config) { {} }
 
-  let (:no_service_config) { { services: {} } }
+  let(:no_service_config) { { services: {} } }
 
-  let (:single_basic_service_config) {
+  let(:single_basic_service_config) {
     {
       services: {
                   twitter: { hostname: 'twitter.com' }
@@ -16,7 +16,7 @@ describe Grifter::Configuration do
     }
   }
 
-  let (:all_service_values_defined) {
+  let(:all_service_values_defined) {
     {
       services: {
         twitter: {
@@ -25,6 +25,23 @@ describe Grifter::Configuration do
           ssl: true,
           ignore_ssl_cert: true,
           base_uri: '/api/v2',
+        }
+      },
+      environments: {
+        qa: {
+          twitter: {
+            url: 'http://qa.twitter.com:1234'
+          }
+        }
+      }
+    }
+  }
+
+  let(:url_based_configuration) {
+    {
+      services: {
+        fakebook: {
+          url: 'https://api.fake.facebook.com:1234/v3'
         }
       }
     }
@@ -56,6 +73,64 @@ describe Grifter::Configuration do
     it "should allow overrides for all values" do
       config = configuration.normalize_config all_service_values_defined
       config.should eql(all_service_values_defined)
+    end
+
+    it "should allow overriding configuration based on an environment variable with the URL" do
+      ENV['GRIFTER_MYAPI_URL'] = 'https://override.myapi.net:98765/baseuri'
+      config = configuration.load_config_file config_file: 'spec/resources/example_config.yml'
+      ENV['GRIFTER_MYAPI_URL'] = nil
+      config[:services].should eql({
+        myapi: {
+          hostname: 'override.myapi.net',
+          name: 'myapi',
+          port: 98765,
+          ssl: true,
+          ignore_ssl_cert: false,
+          base_uri: '/baseuri',
+        },
+        myotherapi: {
+          hostname: 'myotherapi.com',
+          name: 'myotherapi',
+          port: 80,
+          ssl: false,
+          ignore_ssl_cert: false,
+          base_uri: '',
+        },
+      })
+    end
+  end
+
+  describe "URL based configuration" do
+    it "should support defining all configuration aspects via a single url" do
+      config = configuration.normalize_config url_based_configuration
+      config[:services].should include :fakebook
+      config[:services][:fakebook].should eql({
+        hostname: 'api.fake.facebook.com',
+        port: 1234,
+        ssl: true,
+        ignore_ssl_cert: false,
+        base_uri: '/v3',
+        name: 'fakebook',
+      })
+    end
+
+    it "should raise an error for a bad url" do
+      bad_config = { services: { badurl: { url: 'http://has a space.com' }}}
+      expect { configuration.normalize_config bad_config }.to raise_error GrifterConfigurationError
+    end
+
+    it "should support environment overrides for url" do
+      config = configuration.normalize_config all_service_values_defined, environment: :qa
+      config[:services].should eql({
+        twitter: {
+          hostname: 'qa.twitter.com',
+          port: 1234,
+          ssl: false,
+          ignore_ssl_cert: true,
+          base_uri: '',
+          name: 'twitter'
+        }
+      })
     end
   end
 
