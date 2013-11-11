@@ -21,6 +21,9 @@ class Grifter
 
     #attempts to parse json strings into native ruby objects
     def objectify json_string
+      if json_string.nil? || json_string == ""
+        return nil
+      end
       case json_string
       when Hash, Array
         return json_string
