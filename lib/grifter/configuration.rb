@@ -23,6 +23,7 @@ class Grifter
         raise GrifterConfigurationError.new "url is not a proper aboslute URL: #{url}"
       end
       parsed = URI.parse url
+      #make the url faraday is configured with
       {
         :hostname => parsed.host,
         :port => parsed.port,
@@ -36,7 +37,7 @@ class Grifter
         config_file: ENV['GRIFTER_CONFIG_FILE'] ? ENV['GRIFTER_CONFIG_FILE'] : 'grifter.yml',
         environment: ENV['GRIFTER_ENVIRONMENT'],
       }.merge(options)
-      Log.debug "Loading config file '#{options[:config_file]}'"
+      Grifter::Log.debug "Loading config file '#{options[:config_file]}'"
       unless File.exist?(options[:config_file])
         raise GrifterConfigFileMissing.new "No such config file: '#{options[:config_file]}'"
       end
@@ -68,7 +69,6 @@ class Grifter
           base_uri: '',
           port: (service_config[:ssl] == true ? 443 : 80),
         }.merge(service_config))
-
       end
 
       #merge any environment overrides into the service block
@@ -93,6 +93,12 @@ class Grifter
           Log.warn "Environment variable #{env_var_name} is defined, using it to override configuration"
           service_config.merge!(get_service_config_from_url(ENV[env_var_name]))
         end
+      end
+
+      #add in the faraday url as the final thing after figuring everything else out
+      config[:services].each_pair do |service_name, service_config|
+        #set the url we'll use to start faraday
+        service_config[:faraday_url] = "#{service_config[:ssl] ? 'https':'http'}://#{service_config[:hostname]}:#{service_config[:port].to_s}"
       end
 
       #join the grift globs with the relative path to config file

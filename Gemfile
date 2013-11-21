@@ -2,7 +2,9 @@ source :rubygems
 
 #gemspec
 
+gem 'faraday'
 gem 'json'
+gem 'typhoeus'
 
 group :development do
   gem 'rspec'

@@ -73,5 +73,13 @@ describe Grifter::JsonHelpers do
       str = 'abc;123'
       json_helper.objectify(str).should eql str
     end
+
+    it "should return nil as nil" do
+      json_helper.objectify(nil).should eql nil
+    end
+
+    it "should return an empty string as nil" do
+      json_helper.objectify('').should eql nil
+    end
   end
 end

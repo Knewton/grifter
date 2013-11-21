@@ -25,6 +25,7 @@ describe Grifter::Configuration do
           ssl: true,
           ignore_ssl_cert: true,
           base_uri: '/api/v2',
+          url: 'https://twitter.com:8888',
         }
       },
       environments: {
@@ -66,6 +67,7 @@ describe Grifter::Configuration do
           ignore_ssl_cert: false,
           base_uri: '',
           name: 'twitter',
+          faraday_url: 'http://twitter.com:80',
         }}
       )
     end
@@ -87,6 +89,7 @@ describe Grifter::Configuration do
           ssl: true,
           ignore_ssl_cert: false,
           base_uri: '/baseuri',
+          faraday_url: 'https://override.myapi.net:98765',
         },
         myotherapi: {
           hostname: 'myotherapi.com',
@@ -95,6 +98,7 @@ describe Grifter::Configuration do
           ssl: false,
           ignore_ssl_cert: false,
           base_uri: '',
+          faraday_url: 'http://myotherapi.com:80',
         },
       })
     end
@@ -111,6 +115,7 @@ describe Grifter::Configuration do
         ignore_ssl_cert: false,
         base_uri: '/v3',
         name: 'fakebook',
+        faraday_url: 'https://api.fake.facebook.com:1234',
       })
     end
 
@@ -128,7 +133,8 @@ describe Grifter::Configuration do
           ssl: false,
           ignore_ssl_cert: true,
           base_uri: '',
-          name: 'twitter'
+          name: 'twitter',
+          faraday_url: 'http://qa.twitter.com:1234',
         }
       })
     end
@@ -145,6 +151,7 @@ describe Grifter::Configuration do
           ssl: false,
           ignore_ssl_cert: false,
           base_uri: '',
+          faraday_url: 'http://myapi.com:80',
         },
         myotherapi: {
           hostname: 'myotherapi.com',
@@ -153,6 +160,7 @@ describe Grifter::Configuration do
           ssl: false,
           ignore_ssl_cert: false,
           base_uri: '',
+          faraday_url: 'http://myotherapi.com:80',
         },
       })
     end
@@ -184,6 +192,7 @@ describe Grifter::Configuration do
           ssl: false,
           ignore_ssl_cert: false,
           base_uri: '',
+          faraday_url: 'http://dev.myapi.com:123',
         },
         myotherapi: {
           hostname: 'myotherapi.com',
@@ -192,6 +201,7 @@ describe Grifter::Configuration do
           ssl: false,
           ignore_ssl_cert: false,
           base_uri: '',
+          faraday_url: 'http://myotherapi.com:80',
         },
       })
 

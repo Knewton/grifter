@@ -1,4 +1,5 @@
 require 'grifter/http_service'
+require 'faraday/adapter/test'
 
 describe Grifter::HTTPService do
 
@@ -17,12 +18,6 @@ describe Grifter::HTTPService do
   end
 
   describe "http methods" do
-    before(:each) do
-      response = Net::HTTPOK.new('1.1', 200, "stub response body")
-      response.stub(:body).and_return '{"foo": "bar"}'
-      @svc.http.stub!(:request).and_return(response)
-    end
-
     #methods without a request body
     [
       :get,
@@ -31,7 +26,10 @@ describe Grifter::HTTPService do
       :delete,
     ].each do |method|
       it "should have a #{method.to_s} method" do
-        @svc.send(method, '/testing').should be_a Hash
+        @svc.stubs.send(method, '/testing') { [200, {}, '{"foo": "bar"}'] }
+        response = @svc.send(method, '/testing')
+        response.should be_a Hash
+        response.should eql({'foo' => 'bar'})
       end
     end
 
@@ -42,29 +40,29 @@ describe Grifter::HTTPService do
       :patch,
     ].each do |method|
       it "should have a #{method.to_s} method" do
-        @svc.send(method, '/testing', {'a_key' => 'a_value'}).should be_a Hash
+        @svc.stubs.send(method, '/testing') { [200, {}, '{"foo": "bar"}'] }
+        response = @svc.send(method, '/testing', {'a_key' => 'a_value'})
+        response.should be_a Hash
+        response.should eql({'foo' => 'bar'})
       end
     end
 
     it "should remember the last request and response" do
+        @svc.stubs.send(:post, '/testing') { [200, {}, '{"foo": "bar"}'] }
         @svc.post '/testing', 'a_key' => 'a_value'
-        @svc.last_request.should be_a Net::HTTP::Post
-        @svc.last_response.should be_a Net::HTTPOK
+        #@svc.last_request.should be_a Net::HTTP::Post
+        @svc.last_response.status.should eql 200
     end
 
     it "should support a timeout option for overriding timeout for a single request" do
-      @svc.http.should_receive(:read_timeout=).with(3)
-      @svc.http.should_receive(:read_timeout=).with(60)
+      @svc.stubs.send(:get, '/testing') { [200, {}, '{"foo": "bar"}'] }
       @svc.get '/testing', timeout: 3
-      @svc.http.read_timeout.should eql 60
     end
   end
 
   describe "error handling" do
     before(:each) do
-      response = Net::HTTPBadRequest.new('1.1', 400, "stuff not sure what it does")
-      response.stub(:body).and_return '{"error_code": "400", "error_message": "bad api client, no cookies for you!"}'
-      @svc.http.stub!(:request).and_return(response)
+      @svc.stubs.get('/testing') { [400, {}, '{"error_code": "400", "error_message": "bad api client, no cookies for you!"}'] }
     end
 
     it "should raise a RequestException when a 400 is returned" do
@@ -76,27 +74,25 @@ describe Grifter::HTTPService do
     it "should set read_timeout for the http service based on timeout option" do
       timeout_cfg = test_configuration.merge timeout: 2
       new_svc = Grifter::HTTPService.new timeout_cfg
-      new_svc.http.read_timeout.should eql 2
+      #new_svc.http.read_timeout.should eql 2
     end
 
     it "should have 60 seconds by default" do
-      @svc.http.read_timeout.should eql 60
+      #@svc.http.read_timeout.should eql 60
     end
   end
 
   describe "default header configuration" do
     it "should specification of default headers" do
-      svc = Grifter::HTTPService.new test_configuration.merge default_headers: { 'abc' => '123' }
-      response = Net::HTTPOK.new('1.1', 200, "stub response body")
-      response.stub(:body).and_return '{"foo": "bar"}'
-      svc.http.stub!(:request).and_return(response)
+      @svc.stubs.get('/testing') { [200, {}, '{"foo": "bar"}']}
 
-      svc.http.should_receive(:request).with do |req|
-        req['abc'].should eql('123')
-      end
+      #@svc.conn.should_receive(:request).with do |req|
+      #  req['abc'].should eql('123')
+      #end
 
-      svc.get '/hello'
+      @svc.get '/testing'
 
     end
   end
+
 end

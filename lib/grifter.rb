@@ -2,9 +2,11 @@ require_relative 'grifter/http_service'
 require_relative 'grifter/configuration'
 require_relative 'grifter/log'
 require_relative 'grifter/blankslate'
+require_relative 'grifter/instrumentation'
 
 class Grifter
   include Grifter::Configuration
+  include Grifter::Instrumentation
 
   DefaultConfigOptions = {
     #TODO: service_config: nil,
@@ -43,6 +45,8 @@ class Grifter
     if @config[:authenticate]
       self.grifter_authenticate_do
     end
+
+    start_instrumentation
   end
 
   attr_reader :services

@@ -21,17 +21,14 @@ class Grifter
 
     #attempts to parse json strings into native ruby objects
     def objectify json_string
-      if json_string.nil? || json_string == ""
-        return nil
-      end
+      return nil if json_string.nil? or json_string==''
       case json_string
       when Hash, Array
         return json_string
       else
         JSON.parse(json_string.to_s)
       end
-    rescue Exception => e
-      Log.debug "Unable to parse non-json object: #{e.to_s}"
+    rescue Exception
       json_string
     end
 
