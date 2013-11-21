@@ -69,7 +69,11 @@ class Grifter
 
       Log.debug "RESPONSE CODE: #{response.code}"
       Log.debug "RESPONSE HEADERS: #{response.to_hash}"
-      Log.debug "RESPONSE BODY:\n#{jsonify response.body}\n"
+      if response['content-type'] =~ /json/
+        Log.debug "RESPONSE BODY:\n#{jsonify response.body}\n"
+      else
+        Log.debug "RESPONSE BODY: body has content-type '#{response['content-type']}', not logging in full"
+      end
 
       @last_request = req
       @last_response = response
