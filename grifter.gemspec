@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "grifter"
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Schultheis"]
-  s.date = "2013-11-05"
+  s.date = "2013-12-04"
   s.description = "convention based approach to interfacing with an HTTP JSON API."
   s.email = "rob@knewton.com"
   s.executables = ["grift"]
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "lib/grifter/configuration.rb",
     "lib/grifter/helpers.rb",
     "lib/grifter/http_service.rb",
+    "lib/grifter/instrumentation.rb",
     "lib/grifter/json_helpers.rb",
     "lib/grifter/log.rb"
   ]
@@ -41,20 +42,26 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<faraday>, [">= 0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
+      s.add_runtime_dependency(%q<typhoeus>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<pry>, [">= 0"])
       s.add_development_dependency(%q<awesome_print>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
     else
+      s.add_dependency(%q<faraday>, [">= 0"])
       s.add_dependency(%q<json>, [">= 0"])
+      s.add_dependency(%q<typhoeus>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<pry>, [">= 0"])
       s.add_dependency(%q<awesome_print>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
     end
   else
+    s.add_dependency(%q<faraday>, [">= 0"])
     s.add_dependency(%q<json>, [">= 0"])
+    s.add_dependency(%q<typhoeus>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<pry>, [">= 0"])
     s.add_dependency(%q<awesome_print>, [">= 0"])
