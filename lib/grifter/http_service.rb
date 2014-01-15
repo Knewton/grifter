@@ -121,8 +121,6 @@ class Grifter
       #@last_request = req
       @last_response = response
 
-      raise RequestException.new(nil, response) unless response.status >= 200 and response.status < 300
-
       response_obj = objectify response.body
       if response.headers['content-type'] =~ /json/
         logger.debug [
@@ -133,6 +131,9 @@ class Grifter
           ''
         ].flatten.compact.join("\n")
       end
+
+      raise RequestException.new(nil, response) unless response.status >= 200 and response.status < 300
+
       return response_obj
     end
 
