@@ -14,6 +14,7 @@ class Grifter
     authenticate: false,
     load_from_config_file: true,
     services: {},
+    instrumentation: false,
   }
   def initialize options={}
     options = DefaultConfigOptions.merge(options)
@@ -46,7 +47,7 @@ class Grifter
       self.grifter_authenticate_do
     end
 
-    start_instrumentation
+    start_instrumentation if @config[:instrumentation] = true
   end
 
   attr_reader :services

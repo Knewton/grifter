@@ -58,8 +58,8 @@ class Grifter
 
     #allow stubbing http if we are testing
     attr_reader :http if defined?(RSpec)
-
-    attr_reader :headers, :name, :config, :conn
+    attr_reader :name, :config, :conn
+    attr_accessor :headers  #allows for doing some fancy stuff in threading
 
     #this is useful for testing apis, and other times
     #you want to interrogate the http details of a response
