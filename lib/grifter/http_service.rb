@@ -1,6 +1,7 @@
 require 'faraday'
 require 'typhoeus'
 require 'typhoeus/adapters/faraday' #https://github.com/typhoeus/typhoeus/issues/226#issuecomment-9919517
+#Faraday.require_libs 'parameters'
 
 require_relative 'json_helpers'
 require_relative 'log'
@@ -27,8 +28,11 @@ class Grifter
         #do our own logging
         #conn_builder.response logger: logger
         #conn_builder.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-        conn_builder.adapter  :typhoeus
+        conn_builder.adapter  @config.fetch(:adapter, :typhoeus).intern
         conn_builder.ssl[:verify] = false if @config[:ignore_ssl_cert]
+
+        #defaulting this to flat adapter avoids issues when duplicating parameters
+        conn_builder.options[:params_encoder] = Faraday.const_get(@config.fetch(:params_encoder, 'FlatParamsEncoder'))
 
         #this nonsense dont work?!  https://github.com/lostisland/faraday_middleware/issues/76
         #conn_builder.use :instrumentation
