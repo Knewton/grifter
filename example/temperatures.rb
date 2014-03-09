@@ -1,3 +1,4 @@
+temps = {}
 [
   'New York, NY',
   'Toronto, Canada',
@@ -8,5 +9,7 @@
   weather = weather_for city
   kelvin = weather['main']['temp']
   celcius = (kelvin - 273.15).round
-  puts "#{city}: #{celcius} celcius"
+  temps[city] = "#{celcius.to_s} C"
 end
+
+return temps.to_yaml

@@ -1,35 +1,20 @@
 Grifter
 =======
-Grifter makes it smooth to work with JSON HTTP APIs with confidence
+Do cool stuff with HTTP JSON APIs.  Designed for the real world of developing systems based on service-oriented-architecture.
 
-Intro
---------
-Grifter allows creating a DSL for working with any HTTP JSON RESTy API.
-You can GET, POST and otherwise interact with any set of APIs through
-high level methods you define, allowing your code to ignore all the
-details around the mechanics of connecting to the API, executing the
-request, and turning JSON into native ruby objects.
+What is Grifter?
+----------------
+Grifter is primarily designed to be used by software teams that build HTTP JSON services.
+Grifter makes it easy to:
+* Define "macro" methods that accomplish high level goals through service calls.
+* Call services or macro methods from the command line, adhoc scripts, or programtically within any Ruby program.
+* Test services using RSpec or other testing frameworks
+* "Point" at different environments (eg. QA, Staging, Production)
 
-Using grifter gets you for free:
-- a cmd line interface for your json http apis
-- a ruby scripting language for interacting with your json http apis
-- An object you can use in any kind of ruby program for easily sending
-  API requests
-- An RSpec Helper that makes testing Rest APIs painless
+Grifter relies heavily on the 'convention over configuration' approach.  For very little code, you
+get a lot of functionality.
 
-Grifter relies heavily on the 'convention over configuration' approach,
-which means for less code, you get more.
-
-
-Features
---------
-- Work with multiple APIs
-- Work with multiple deployment environments (Staging, Production, etc.)
-- Script calls to API(s)
-- Command line calls to API(s)
-- Craft clean API tests using the included RSPec helper
-- Unified approach to handling request errors
-- Convention over configuration approach to defining the API interface
+Grifter is based on [Faraday](https://github.com/lostisland/faraday), thus there is basic support for making requests concurrently, and for swapping out the HTTP "adapter".
 
 Getting Started
 ---------------
@@ -133,7 +118,12 @@ And get back:
     1 example, 0 failures
 
 
+Further Information
+-------------------
+
+Checkout out the [Wiki](https://github.com/Knewton/grifter/wiki) for info on configuration, authentication, and more.
+
+
 Copyright
 ---------
-Copyright (c) 2013 Knewton. See LICENSE.txt for
-further details.
+Copyright (c) 2013 Knewton. See LICENSE.txt for further details.
