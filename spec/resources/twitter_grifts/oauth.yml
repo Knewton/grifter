@@ -1,6 +1,0 @@
-#use this file to contain your twitter consumer and secret key
-#generally, do NOT check in your keys into source control
-#this file is included exclusively for demo purposes
----
-consumer_key: xxxxxxxxxxxxxxxxxxxxxx
-consumer_secret:	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

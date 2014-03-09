@@ -101,10 +101,12 @@ class Grifter
         service_config[:faraday_url] = "#{service_config[:ssl] ? 'https':'http'}://#{service_config[:hostname]}:#{service_config[:port].to_s}"
       end
 
-      #join the grift globs with the relative path to config file
-      if config[:grift_globs] && options[:config_file]
-        config_file_dir = File.dirname options[:config_file]
-        config[:grift_globs].map! {|glob| config_file_dir + '/' + glob.sub(/^\//,'')}
+      #setup the grift globs, and this seems more sloppy than it should be
+      glob_base_dir = options[:config_file] ? File.dirname(options[:config_file]) : Dir.pwd
+      glob_base_dir = File.expand_path(glob_base_dir)
+      config[:grift_globs] ||= options[:grift_globs]
+      if config[:grift_globs]
+        config[:grift_globs].map! {|glob| glob_base_dir + '/' + glob.sub(/^\//,'')}
       end
 
       return config

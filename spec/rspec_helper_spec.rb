@@ -1,11 +1,16 @@
 require 'grifter'
 require 'grifter/helpers'
 
+Grifter::Helpers.module_eval do
+  @@grifter_instance = nil
+end
+
 describe Grifter::Helpers do
   describe "including" do
     it "should be includable" do
       mod = Module.new do
-        ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/grifter.yml'
+        ENV.delete 'GRIFTER_ENVIRONMENT'
+        ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/example_with_grifts/grifter.yml'
         include Grifter::Helpers
       end
 

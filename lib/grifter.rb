@@ -8,16 +8,18 @@ class Grifter
   include Grifter::Configuration
   include Grifter::Instrumentation
 
-  DefaultConfigOptions = {
-    #TODO: service_config: nil,
-    grift_globs: ['*_grifts/**/*_grifts.rb'],
-    authenticate: false,
-    load_from_config_file: true,
-    services: {},
-    instrumentation: false,
-  }
+  def default_options
+    {
+      grift_globs: ['*_grifts/**/*_grifts.rb'],
+      authenticate: false,
+      load_from_config_file: true,
+      services: {},
+      instrumentation: false,
+    }
+  end
+
   def initialize options={}
-    options = DefaultConfigOptions.merge(options)
+    options = default_options.merge(options)
     @config = if options[:load_from_config_file]
                 options.merge load_config_file(options)
               else
@@ -86,7 +88,7 @@ class Grifter
     end
   end
 
-private
+  private
   def with_local_load_path load_path, &block
     $: << load_path
     rtn = yield block

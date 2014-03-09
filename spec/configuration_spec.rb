@@ -79,7 +79,7 @@ describe Grifter::Configuration do
 
     it "should allow overriding configuration based on an environment variable with the URL" do
       ENV['GRIFTER_MYAPI_URL'] = 'https://override.myapi.net:98765/baseuri'
-      config = configuration.load_config_file config_file: 'spec/resources/example_config.yml'
+      config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
       ENV['GRIFTER_MYAPI_URL'] = nil
       config[:services].should eql({
         myapi: {
@@ -142,7 +142,7 @@ describe Grifter::Configuration do
 
   describe "loading config from a file" do
     it "should allow specifying a filename" do
-      config = configuration.load_config_file config_file: 'spec/resources/example_config.yml'
+      config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
       config[:services].should eql({
         myapi: {
           hostname: 'myapi.com',
@@ -166,7 +166,7 @@ describe Grifter::Configuration do
     end
 
     it "should take the filename from an environment variable if specified" do
-      ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/example_config.yml'
+      ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/example_with_no_grifts/example_config.yml'
       config = configuration.load_config_file
       config[:services].keys.should =~ [:myapi, :myotherapi]
       ENV['GRIFTER_CONFIG_FILE'] = nil
@@ -182,7 +182,7 @@ describe Grifter::Configuration do
 
   describe "environment based overriding" do
     it "should allow overriding configuration based on an environment name" do
-      config = configuration.load_config_file config_file: 'spec/resources/example_config.yml',
+      config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml',
                                               environment: :dev
       config[:services].should eql({
         myapi: {
@@ -209,7 +209,7 @@ describe Grifter::Configuration do
 
     it "should allow setting environment via an environment variable" do
       ENV['GRIFTER_ENVIRONMENT'] = 'dev'
-      config = configuration.load_config_file config_file: 'spec/resources/example_config.yml'
+      config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
 
       config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
       ENV['GRIFTER_ENVIRONMENT'] = nil

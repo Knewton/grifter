@@ -1,9 +1,14 @@
 require 'grifter'
 
 describe Grifter do
+  before(:each) do
+    ENV.delete 'GRIFTER_ENVIRONMENT'
+    ENV.delete 'GRIFTER_CONFIG_FILE'
+  end
+
   describe "Configuration" do
     it "should allow for initializing from a config file" do
-      grifter = Grifter.new :config_file => 'spec/resources/example_config.yml'
+      grifter = Grifter.new :config_file => 'spec/resources/example_with_no_grifts/example_config.yml'
       grifter.should respond_to(:myapi)
       grifter.myapi.name.should eql('myapi')
       grifter.services.any?{|s| s.name == 'myapi' }.should be_true
@@ -14,7 +19,7 @@ describe Grifter do
     end
 
     it "should allow access to reading it's configuration" do
-      grifter = Grifter.new :config_file => 'spec/resources/example_config.yml'
+      grifter = Grifter.new :config_file => 'spec/resources/example_with_no_grifts/example_config.yml'
       grifter.should respond_to(:grifter_configuration)
       grifter.grifter_configuration.should be_a Hash
       grifter.grifter_configuration.keys.should =~ [:grift_globs, :authenticate, :load_from_config_file, :services, :config_file, :environments, :environment, :instrumentation]
@@ -23,7 +28,7 @@ describe Grifter do
 
   describe "Grifter files" do
     it "should allow loading grifter files which define methods for interacting with apis" do
-      grifter = Grifter.new :config_file => 'spec/resources/grifter.yml'
+      grifter = Grifter.new :config_file => 'spec/resources/example_with_grifts/grifter.yml'
       grifter.should respond_to :timeline_for
     end
 
@@ -39,7 +44,7 @@ describe Grifter do
 
   describe "Authentication" do
     it "when authenticate is invoked, it should call any method ending in grifter_authenticate" do
-      grifter = Grifter.new :config_file => 'spec/resources/example_config.yml'
+      grifter = Grifter.new :config_file => 'spec/resources/example_with_no_grifts/example_config.yml'
       grifter.define_singleton_method :test_svc_grifter_authenticate do
         true
       end
