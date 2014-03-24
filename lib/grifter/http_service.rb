@@ -1,7 +1,8 @@
 require 'faraday'
 require 'typhoeus'
 require 'typhoeus/adapters/faraday' #https://github.com/typhoeus/typhoeus/issues/226#issuecomment-9919517
-#Faraday.require_libs 'parameters'
+require 'active_support/notifications'
+require 'securerandom'
 
 require_relative 'json_helpers'
 require_relative 'log'
