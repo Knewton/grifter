@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Robert Schultheis"]
-  s.date = "2014-03-24"
+  s.date = "2014-03-27"
   s.description = "convention based approach to interfacing with an HTTP JSON API."
   s.email = "rob@knewton.com"
   s.executables = ["grift"]
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<faraday>, ["= 0.9.0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
       s.add_runtime_dependency(%q<typhoeus>, ["= 0.6.4"])
-      s.add_runtime_dependency(%q<activesupport>, ["= 4.0.3"])
+      s.add_runtime_dependency(%q<activesupport>, [">= 3.2"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<pry>, [">= 0"])
       s.add_development_dependency(%q<awesome_print>, [">= 0"])
@@ -55,7 +55,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<faraday>, ["= 0.9.0"])
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<typhoeus>, ["= 0.6.4"])
-      s.add_dependency(%q<activesupport>, ["= 4.0.3"])
+      s.add_dependency(%q<activesupport>, [">= 3.2"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<pry>, [">= 0"])
       s.add_dependency(%q<awesome_print>, [">= 0"])
@@ -65,7 +65,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<faraday>, ["= 0.9.0"])
     s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<typhoeus>, ["= 0.6.4"])
-    s.add_dependency(%q<activesupport>, ["= 4.0.3"])
+    s.add_dependency(%q<activesupport>, [">= 3.2"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<pry>, [">= 0"])
     s.add_dependency(%q<awesome_print>, [">= 0"])
