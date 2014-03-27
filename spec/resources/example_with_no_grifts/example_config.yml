@@ -2,6 +2,9 @@
 services:
   myapi:
     hostname: 'myapi.com'
+    default_headers:
+      user-agent: 'RSpec'
+      test: '0'
 
   myotherapi:
     hostname: 'myotherapi.com'
@@ -11,6 +14,9 @@ environments:
     myapi:
       hostname: 'dev.myapi.com'
       port: 123  
+      default_headers:
+        user-agent: 'RSpec test'
+        test: '1'
 
   staging:
     myapi:

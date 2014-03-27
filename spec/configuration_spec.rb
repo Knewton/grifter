@@ -90,6 +90,7 @@ describe Grifter::Configuration do
           ignore_ssl_cert: false,
           base_uri: '/baseuri',
           faraday_url: 'https://override.myapi.net:98765',
+          default_headers: { :'user-agent' => 'RSpec', :test => '0' },
         },
         myotherapi: {
           hostname: 'myotherapi.com',
@@ -152,6 +153,7 @@ describe Grifter::Configuration do
           ignore_ssl_cert: false,
           base_uri: '',
           faraday_url: 'http://myapi.com:80',
+          default_headers: { :'user-agent' => 'RSpec', :test => '0' },
         },
         myotherapi: {
           hostname: 'myotherapi.com',
@@ -193,6 +195,7 @@ describe Grifter::Configuration do
           ignore_ssl_cert: false,
           base_uri: '',
           faraday_url: 'http://dev.myapi.com:123',
+          default_headers: { :'user-agent' => 'RSpec test', :test => '1' },
         },
         myotherapi: {
           hostname: 'myotherapi.com',
