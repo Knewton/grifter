@@ -80,7 +80,6 @@ describe Grifter::Configuration do
     it "should allow overriding configuration based on an environment variable with the URL" do
       ENV['GRIFTER_MYAPI_URL'] = 'https://override.myapi.net:98765/baseuri'
       config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
-      ENV['GRIFTER_MYAPI_URL'] = nil
       config[:services].should eql({
         myapi: {
           hostname: 'override.myapi.net',
@@ -171,7 +170,6 @@ describe Grifter::Configuration do
       ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/example_with_no_grifts/example_config.yml'
       config = configuration.load_config_file
       config[:services].keys.should =~ [:myapi, :myotherapi]
-      ENV['GRIFTER_CONFIG_FILE'] = nil
     end
 
     it "should raise a custom exception if config file does not exist" do
@@ -215,7 +213,6 @@ describe Grifter::Configuration do
       config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
 
       config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
-      ENV['GRIFTER_ENVIRONMENT'] = nil
 
     end
   end
