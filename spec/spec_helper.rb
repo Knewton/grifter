@@ -9,6 +9,13 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 #require 'grifter'
 
+
+module TestConstants
+  FullExampleFile = File.expand_path('../examples/full/grifter.yml', __FILE__)
+  FullExampleDir = File.dirname FullExampleFile
+end
+include TestConstants
+
 #configure rspec basics
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -25,9 +32,6 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   #  config.order = 'random'
-
-  #config.include TestDataHelpers
-  #
 
   #some tests use environment variables prefixed with GRIFTER_
   #its best to just always clear any env vars with that prefix

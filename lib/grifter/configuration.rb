@@ -5,6 +5,10 @@ module Grifter
 
     DEFAULT_CONFIG_FILE = 'grifter.yml'
 
+    # add a service to grifter
+    #
+    # @param name [String] the name of the service
+    # @param url [String] an absolute url to the api
     def grifter_service name, url
       @default_services ||= {}
       @default_services[name] = {'url' => url}

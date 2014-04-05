@@ -3,9 +3,6 @@ require 'grifter/configuration'
 describe Grifter::Configuration do
   subject { Class.new { include Grifter::Configuration }.new }
 
-  FullExampleFile = File.expand_path('../examples/full/grifter.yml', __FILE__)
-  FullExampleDir = File.dirname FullExampleFile
-
   #these specs involve changing around the working directory
   #to pick up tcfg.yml / tcfg.secret.yml by default
   before(:each) do
