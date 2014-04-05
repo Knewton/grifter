@@ -1,7 +1,27 @@
+---
 #base configuration of services goes here
 services:
-  owm:
-    url: 'http://api.openweathermap.org'
-  freegeoip:
-    url: 'http://freegeoip.net'
+  myapi:
+    url: 'https://my.api.com'
+  myotherapi:
+    url: 'https://my.other.api.net'
 
+grifter_environments:
+  qa:
+    services:
+      myapi:
+        url: 'http://qa.my.api.com'
+
+  dev:
+    services:
+      myapi:
+        url: 'http://dev.my.api.com'
+      myotherapi:
+        url: 'http://dev.my.other.api.net'
+
+  prod:
+    services:
+      myapi:
+        url: 'https://my.api.com'
+      myotherapi:
+        url: 'https://my.other.api.net'
