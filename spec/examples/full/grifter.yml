@@ -1,0 +1,7 @@
+#base configuration of services goes here
+services:
+  owm:
+    url: 'http://api.openweathermap.org'
+  freegeoip:
+    url: 'http://freegeoip.net'
+
