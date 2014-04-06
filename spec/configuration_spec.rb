@@ -62,20 +62,6 @@ describe Grifter::Configuration do
   end
 
 
-  describe '#grifter_service' do
-    it "should allow specifying services through a method call" do
-      subject.grifter_service 'mynewapi', 'http://api.my.new.io'
-      subject.grifter_configuration['services'].should have_key 'mynewapi'
-      subject.grifter_service 'myextranewapi', 'http://api.my.new.us'
-      subject.grifter_configuration['services'].should have_key 'mynewapi'
-      subject.grifter_configuration['services'].should have_key 'myextranewapi'
-    end
-
-    it "should raise an error if url is not absolute" do
-      expect {subject.grifter_service 'mynewapi', 'xxx'}.to raise_error(Grifter::ConfigurationError)
-    end
-  end
-
   describe "resolving configuration" do
 
     before(:each) do

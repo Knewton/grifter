@@ -13,6 +13,8 @@ require 'rspec'
 module TestConstants
   FullExampleFile = File.expand_path('../examples/full/grifter.yml', __FILE__)
   FullExampleDir = File.dirname FullExampleFile
+
+  SingleGriftFile = File.expand_path('../examples/simple_grifts/grifts.rb', __FILE__)
 end
 include TestConstants
 
@@ -31,7 +33,7 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  #  config.order = 'random'
+  config.order = 'random'
 
   #some tests use environment variables prefixed with GRIFTER_
   #its best to just always clear any env vars with that prefix

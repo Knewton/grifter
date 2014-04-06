@@ -1,23 +1,17 @@
 require_relative 'configuration'
-require_relative 'http'
+require_relative 'api_clients'
+require_relative 'grift_files'
 
 module Grifter
   module Grifts
+
     include Grifter::Configuration
+    include Grifter::GriftFiles
+    include Grifter::ApiClients
 
     def initialize
-      build_services
+      grifter_build_client_methods
       super
-    end
-
-    def build_services
-      @grifter_http_clients ||= {}
-      grifter_configuration[:services].each_pair do |svc, svc_cfg|
-        @grifter_http_clients[svc] = Grifter::HTTP.new svc_cfg
-        define_singleton_method svc.intern do
-          @grifter_http_clients[svc]
-        end
-      end
     end
 
   end

@@ -5,16 +5,6 @@ module Grifter
 
     DEFAULT_CONFIG_FILE = 'grifter.yml'
 
-    # add a service to grifter
-    #
-    # @param name [String] the name of the service
-    # @param url [String] an absolute url to the api
-    def grifter_service name, url
-      @default_services ||= {}
-      @default_services[name] = {'url' => url}
-      init_config true
-    end
-
     def grifter_configuration
       init_config
       @grifter_configuration.tcfg
@@ -22,7 +12,7 @@ module Grifter
 
     def grifter_config_file filename
       @grifter_config_file = filename
-      init_config true
+      init_config
     end
 
     private
@@ -30,28 +20,30 @@ module Grifter
     #ensure the configuration is resolved and ready to use
     #
     # @param force_refresh [Boolean] if false and configuration has been initialized it will not be re-initialized
-    def init_config force_refresh=false
-      if !@grifter_configuration or force_refresh
-        cfg = TCFG::Base.new
+    def init_config
+      if !@grifter_configuration
+        @grifter_configuration = TCFG::Base.new
 
-        @default_services ||= {}
-        cfg.tcfg_set 'services', @default_services
+        default_services = @grifter_configuration.tcfg_fetch 'services'
+        default_services ||= {}
+        @grifter_configuration.tcfg_set 'services', default_services
 
-        cfg.tcfg_set_env_var_prefix 'GRIFTER_'
-
-        if @grifter_config_file
-          #if a config file was specified, we assume it exists
-          cfg.tcfg_config_file @grifter_config_file
-
-        elsif File.exist? DEFAULT_CONFIG_FILE
-          #if a config file was not specific, it is optional that it exist
-          cfg.tcfg_config_file DEFAULT_CONFIG_FILE
-        end
-
-        normalize_services_config cfg
-
-        @grifter_configuration = cfg
+        @grifter_configuration.tcfg_set_env_var_prefix 'GRIFTER_'
       end
+
+      if @grifter_config_file
+        #if a config file was specified, we assume it exists
+        @grifter_configuration.tcfg_config_file @grifter_config_file
+
+      elsif File.exist? DEFAULT_CONFIG_FILE
+        #if a config file was not specific, it is optional that it exist
+        @grifter_configuration.tcfg_config_file DEFAULT_CONFIG_FILE
+      end
+
+      normalize_services_config @grifter_configuration
+
+      @grifter_configuration.tcfg_reset
+
       nil
     end
 
