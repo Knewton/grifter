@@ -30,10 +30,9 @@ module Grifter
       services_config = grifter_configuration['services']
       services_config[name] = svc_cfg
       @grifter_configuration.tcfg_set 'services', services_config
-      init_config
 
       @grifter_http_clients ||= {}
-      @grifter_http_clients[name] = Grifter::HTTP.new svc_cfg
+      @grifter_http_clients[name] = Grifter::HTTP.new grifter_configuration['services'][name]
       define_singleton_method name.intern do
         @grifter_http_clients[name]
       end

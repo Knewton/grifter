@@ -5,6 +5,11 @@ module Grifter
 
     def grifter_load_grift_file filename
       Log.debug "Loading grift file '#{filename}'"
+
+      unless File.exist? filename
+        raise GrifterNoSuchGriftFile.new("No such grift file '#{filename}'")
+      end
+
       #by evaling in a anonymous module, we protect this class's namespace
       anon_mod = Module.new
       with_local_load_path File.dirname(filename) do
@@ -23,4 +28,6 @@ module Grifter
       rtn
     end
   end
+
+  class GrifterNoSuchGriftFile < StandardError; end
 end
