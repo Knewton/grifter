@@ -18,6 +18,14 @@ module Grifter
       self.extend anon_mod
     end
 
+    def grifter_load_grift_glob glob
+      globbed_files = Dir[glob]
+      Log.debug "Found '#{globbed_files.length}' grift files using grift glob '#{glob}'"
+      Dir[glob].each do |filename|
+        grifter_load_grift_file filename
+      end
+    end
+
     private
     def with_local_load_path load_path, &block
       $: << load_path

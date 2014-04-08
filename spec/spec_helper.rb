@@ -17,6 +17,8 @@ module TestConstants
   SingleGriftFile = File.expand_path('../examples/simple_grifts/grifts.rb', __FILE__)
   GriftFileWithARequire = File.expand_path('../examples/simple_grifts/grift_file_with_a_require.rb', __FILE__)
   GriftFileWithState = File.expand_path('../examples/simple_grifts/grift_file_with_state.rb', __FILE__)
+
+  SampleGriftGlob = 'spec/examples/sample_grift_collection/**/*_grifts.rb'
 end
 include TestConstants
 

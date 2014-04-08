@@ -21,10 +21,19 @@ describe Grifter::GriftFiles do
     end
   end
 
+  describe "#grifter_load_grift_glob" do
+    it "should load all the grift files in a directory" do
+      subject.grifter_load_grift_glob SampleGriftGlob
+      [:my_location, :weather_for, :my_weather, :kelvin_to_celcius, :my_temperature].each do |grift_method|
+        subject.should respond_to grift_method
+      end
+    end
+  end
+
   describe "managing state in grifts" do
 
     #it would be nice if this worked... why dont it??
-    it "should allow lexical scoping within a grift", :wip do
+    it "should allow flat lexical scoping within a grift", :wip do
       subject.grifter_load_grift_file GriftFileWithState
       subject.get_current_state.should eql 1
       subject.increment_state
