@@ -4,6 +4,7 @@ module Grifter
   module Configuration
 
     DEFAULT_CONFIG_FILE = 'grifter.yml'
+    DEFAULT_GRIFT_GLOBS = ['*_grifts/*_grifts.rb']
 
     def grifter_configuration
       init_config
@@ -17,6 +18,16 @@ module Grifter
 
     private
 
+    def grifter_config_file_path
+      if @grifter_config_file 
+        File.expand_path @grifter_config_file
+      elsif File.exist? DEFAULT_CONFIG_FILE
+        File.expand_path DEFAULT_CONFIG_FILE
+      else
+        nil
+      end
+    end
+
     #ensure the configuration is resolved and ready to use
     #
     # @param force_refresh [Boolean] if false and configuration has been initialized it will not be re-initialized
@@ -24,25 +35,22 @@ module Grifter
       if !@grifter_configuration
         @grifter_configuration = TCFG::Base.new
 
-        default_services = @grifter_configuration.tcfg_fetch 'services'
-        default_services ||= {}
-        @grifter_configuration.tcfg_set 'services', default_services
+        #build up some default configuration
+        @grifter_configuration.tcfg_set 'services', {}
+        @grifter_configuration.tcfg_set 'grift_globs', DEFAULT_GRIFT_GLOBS
 
         @grifter_configuration.tcfg_set_env_var_prefix 'GRIFTER_'
       end
 
-      if @grifter_config_file
+      if grifter_config_file_path
         #if a config file was specified, we assume it exists
-        @grifter_configuration.tcfg_config_file @grifter_config_file
-
-      elsif File.exist? DEFAULT_CONFIG_FILE
-        #if a config file was not specific, it is optional that it exist
-        @grifter_configuration.tcfg_config_file DEFAULT_CONFIG_FILE
+        @grifter_configuration.tcfg_config_file grifter_config_file_path
+      else
+        Log.warn "No configuration file specified or found. Make a grift.yml file and point grifter at it."
       end
+      @grifter_configuration.tcfg_set 'grifter_config_file', grifter_config_file_path
 
       normalize_services_config @grifter_configuration
-
-      @grifter_configuration.tcfg_reset
 
       nil
     end

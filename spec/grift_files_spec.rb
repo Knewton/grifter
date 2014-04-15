@@ -30,6 +30,33 @@ describe Grifter::GriftFiles do
     end
   end
 
+  describe "loading grift files from configuration" do
+    before(:each) do
+      @orig_working_dir = Dir.pwd
+    end
+
+    after(:each) do
+      Dir.chdir @orig_working_dir
+    end
+
+    it "should load the grift files based on configuration from the working directory" do
+      Dir.chdir FullExampleDir
+      subject.load_grifts_using_configuration
+      subject.should respond_to :a_grift_method
+      subject.a_grift_method('1').should eql 'return value'
+    end
+
+    it "should load the grift files based on the config file location even if its not in working directory" do
+      subject.grifter_config_file FullExampleFile
+      subject.load_grifts_using_configuration
+      subject.should respond_to :a_grift_method
+      subject.a_grift_method('1').should eql 'return value'
+    end
+
+
+
+  end
+
   describe "managing state in grifts" do
 
     #it would be nice if this worked... why dont it??

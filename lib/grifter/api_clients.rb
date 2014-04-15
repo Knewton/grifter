@@ -27,6 +27,7 @@ module Grifter
         raise 'invalid call to create a grifter service'
       end
 
+      init_config
       services_config = grifter_configuration['services']
       services_config[name] = svc_cfg
       @grifter_configuration.tcfg_set 'services', services_config

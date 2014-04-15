@@ -14,8 +14,8 @@ describe Grifter::Configuration do
   end
 
   context "grifter.yml is not in current working directory" do
-    it "should return a blank configuration, with an empty services hash" do
-      subject.grifter_configuration.should == {'services' => {}}
+    it "should return a blank configuration, with an empty services hash default grift globs and nil for grifter_config_file" do
+      subject.grifter_configuration.should == {'services' => {}, 'grift_globs' => ['*_grifts/*_grifts.rb'], 'grifter_config_file' => nil}
     end
   end
 
