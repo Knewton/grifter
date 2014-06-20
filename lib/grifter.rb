@@ -1,1 +1,1 @@
-require 'grifter/base'
+require_relative 'grifter/base'

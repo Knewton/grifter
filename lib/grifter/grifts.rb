@@ -10,8 +10,13 @@ module Grifter
     include Grifter::ApiClients
 
     def initialize
-      grifter_build_client_methods
+      grifter_initialize
       super
+    end
+
+    def grifter_initialize
+      grifter_build_client_methods
+      load_grifts_using_configuration
     end
 
   end

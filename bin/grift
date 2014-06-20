@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-require_relative '../lib/grifter'
+require_relative '../lib/grifter/base'
 
 Log = Grifter::Log
 
@@ -59,7 +59,7 @@ options = parse_cmd_line
 
 begin
   grifter = Grifter.new options
-rescue GrifterConfigFileMissing => e
+rescue TCFG::NoSuchConfigFileError => e
   Log.error e.message
   Log.error <<-MSG
   \n

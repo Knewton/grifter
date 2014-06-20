@@ -1,3 +1,5 @@
+require 'uri'
+
 require 'tcfg/tcfg_base'
 
 module Grifter
