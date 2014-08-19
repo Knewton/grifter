@@ -1,4 +1,5 @@
 require 'json'
+require 'oj'
 
 class Grifter
   module JsonHelpers
@@ -9,7 +10,7 @@ class Grifter
     def jsonify obj
       case obj
       when String
-        JSON.pretty_generate(JSON.parse(obj))
+        JSON.pretty_generate(Oj.load(obj))
       when Hash, Array
         JSON.pretty_generate(obj)
       else
@@ -26,7 +27,8 @@ class Grifter
       when Hash, Array
         return json_string
       else
-        JSON.parse(json_string.to_s)
+        # JSON.parse(json_string.to_s)
+        Oj.load(json_string.to_s)
       end
     rescue Exception
       json_string
