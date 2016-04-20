@@ -11,11 +11,11 @@ describe Grifter do
       grifter = Grifter.new :config_file => 'spec/resources/example_with_no_grifts/example_config.yml'
       grifter.should respond_to(:myapi)
       grifter.myapi.name.should eql('myapi')
-      grifter.services.any?{|s| s.name == 'myapi' }.should be_true
+      grifter.services.any?{|s| s.name == 'myapi' }.should be_truthy
 
       grifter.should respond_to(:myotherapi)
       grifter.myotherapi.name.should eql('myotherapi')
-      grifter.services.any?{|s| s.name == 'myotherapi' }.should be_true
+      grifter.services.any?{|s| s.name == 'myotherapi' }.should be_truthy
     end
 
     it "should allow access to reading it's configuration" do

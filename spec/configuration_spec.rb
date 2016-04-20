@@ -32,7 +32,8 @@ describe Grifter::Configuration do
         qa: {
           twitter: {
             url: 'http://qa.twitter.com:1234'
-          }
+          },
+          aliases: [:qa_alt]
         }
       }
     }
@@ -139,6 +140,23 @@ describe Grifter::Configuration do
         }
       })
     end
+
+    it "should support environment overrides based on an alias to the environment" do
+      config = configuration.normalize_config all_service_values_defined, environment: :qa_alt
+      config[:services].should eql({
+        twitter: {
+          hostname: 'qa.twitter.com',
+          port: 1234,
+          ssl: false,
+          ignore_ssl_cert: true,
+          base_uri: '',
+          name: 'twitter',
+          faraday_url: 'http://qa.twitter.com:1234',
+        }
+      })
+    end
+
+
   end
 
   describe "loading config from a file" do
@@ -216,7 +234,15 @@ describe Grifter::Configuration do
 
       config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
       ENV['GRIFTER_ENVIRONMENT'] = nil
-
     end
+
+    it "should allow setting environment via an environment variable with an environment alias" do
+      ENV['GRIFTER_ENVIRONMENT'] = 'dev_alt'
+      config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
+
+      config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
+      ENV['GRIFTER_ENVIRONMENT'] = nil
+    end
+
   end
 end

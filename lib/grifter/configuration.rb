@@ -10,6 +10,10 @@ class Grifter
         h[k.intern] = case v
                       when Hash
                         recursive_symbolize v
+                      when Array # this only handles list of strings, which is good enough
+                        v.map do |item|
+                          item.to_sym
+                        end
                       else
                         v
                       end
@@ -34,7 +38,7 @@ class Grifter
 
     def load_config_file options={}
       options = {
-        config_file: ENV['GRIFTER_CONFIG_FILE'] ? ENV['GRIFTER_CONFIG_FILE'] : 'grifter.yml',
+        config_file: ENV.fetch('GRIFTER_CONFIG_FILE', 'grifter.yml'),
         environment: ENV['GRIFTER_ENVIRONMENT'],
       }.merge(options)
       Grifter::Log.debug "Loading config file '#{options[:config_file]}'"
@@ -73,12 +77,35 @@ class Grifter
 
       #merge any environment overrides into the service block
       if options[:environment]
-        config[:environment] = options[:environment].to_sym
-        unless config[:environments] && config[:environments][config[:environment]]
-          raise GrifterConfigurationError.new "No such environment specified in config: '#{config[:environment]}'"
+
+        unless config[:environments]
+          raise GrifterConfigurationError.new "You specified a grifter environment, but there is no environments section in the grifter configuration"
         end
 
-        config[:environments][config[:environment]].each_pair do |service_name, service_overrides|
+        requested_environment_name = options[:environment].to_sym
+        if config[:environments].has_key? requested_environment_name
+          # the environment was literally specified
+          env_config = config[:environments][options[:environment].to_sym]
+          config[:environment] = options[:environment].to_sym
+        else
+          # the environment may be an alias
+          config[:environments].each_pair do |env_name, env_overrides|
+            if env_overrides[:aliases] and
+              env_overrides[:aliases].include? requested_environment_name
+              env_config = env_overrides
+              config[:environment] = env_name
+              break
+            end
+          end
+        end
+
+        if env_config.nil? || config[:environment].nil?
+          raise GrifterConfigurationError.new "No such environment or environment alias specified in config: '#{requested_environment_name.to_s}'"
+        end
+
+        env_config.delete :aliases
+
+        env_config.each_pair do |service_name, service_overrides|
           service_overrides.merge!(get_service_config_from_url(service_overrides.delete(:url)))
           config[:services][service_name].merge! service_overrides
         end

@@ -11,9 +11,10 @@ services:
 
 environments:
   dev:
+    aliases: ['dev_alt']
     myapi:
       hostname: 'dev.myapi.com'
-      port: 123  
+      port: 123
       default_headers:
         user-agent: 'RSpec test'
         test: '1'
