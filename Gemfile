@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'faraday', '0.9.0'
 gem 'json'
-gem 'oj'
 gem 'typhoeus', '~> 0.6.8'
 gem 'activesupport', '>= 3.2'
 
