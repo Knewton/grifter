@@ -1,4 +1,5 @@
 require 'grifter/http_service'
+require 'grifter/instrumentation'
 require 'faraday/adapter/test'
 
 describe Grifter::HTTPService do
@@ -48,10 +49,10 @@ describe Grifter::HTTPService do
     end
 
     it "should remember the last request and response" do
-        @svc.stubs.send(:post, '/testing') { [200, {}, '{"foo": "bar"}'] }
-        @svc.post '/testing', 'a_key' => 'a_value'
-        #@svc.last_request.should be_a Net::HTTP::Post
-        @svc.last_response.status.should eql 200
+      @svc.stubs.send(:post, '/testing') { [200, {}, '{"foo": "bar"}'] }
+      @svc.post '/testing', 'a_key' => 'a_value'
+      #@svc.last_request.should be_a Net::HTTP::Post
+      @svc.last_response.status.should eql 200
     end
 
     it "should support a timeout option for overriding timeout for a single request" do
@@ -95,4 +96,42 @@ describe Grifter::HTTPService do
     end
   end
 
+  describe "Instrumentation" do
+
+    before(:each) do
+      @notification_count = 0
+      @notification_datas = []
+
+      ActiveSupport::Notifications.subscribe(Grifter::Instrumentation::InstrumentationQueueName) do |name, start_time, end_time, _, data|
+        @notification_count += 1
+        @notification_datas << data
+      end
+
+      @svc.stubs.get('/testing') { [200, {}, '{"foo": "bar"}']}
+    end
+
+    it "should report to request.grifter activesupport notification queue" do
+      num_reqs_to_make = rand(1..100)
+      num_reqs_to_make.times { @svc.get '/testing' }
+      @notification_count.should eql num_reqs_to_make
+    end
+
+    it "each notification should include all details of the request and response" do
+      num_reqs_to_make = rand(1..100)
+      num_reqs_to_make.times { @svc.get '/testing' }
+
+      notification_data = @notification_datas.sample
+
+      notification_data.each_pair do |k,v|
+        puts "YO: #{k}: #{v}"
+      end
+      notification_data[:service].should eql 'test service'
+      notification_data[:method].should eql :get
+      notification_data[:path].should eql '/testing'
+      notification_data[:request_headers]['content-type'].should eql 'application/json'
+      notification_data[:request_body].should eql ''
+      notification_data[:response].should be_a Faraday::Response
+      notification_data[:response].status.should eql 200
+    end
+  end
 end

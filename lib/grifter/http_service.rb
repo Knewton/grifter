@@ -109,8 +109,8 @@ class Grifter
 
       #doing it this way avoids problem with OPTIONS method: https://github.com/lostisland/faraday/issues/305
       response = nil
-      metrics_obj = { method: method, service: @name, path: path }
-      ActiveSupport::Notifications.instrument('request.grifter', metrics_obj) do
+      metrics_obj = { method: method, service: @name, path: path, request_body: body, request_headers: req_headers }
+      ActiveSupport::Notifications.instrument(Grifter::Instrumentation::InstrumentationQueueName, metrics_obj) do
         response = @conn.run_request(method, nil, nil, nil) do |req|
           req.path = parsed.path
           req.params = metrics_obj[:params] = query_hash if query_hash

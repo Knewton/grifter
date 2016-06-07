@@ -49,7 +49,7 @@ class Grifter
       self.grifter_authenticate_do
     end
 
-    start_instrumentation if @config[:instrumentation] = true
+    start_instrumentation if @config[:instrumentation]
   end
 
   attr_reader :services
