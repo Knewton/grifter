@@ -9,5 +9,5 @@ group :development do
   gem 'rspec'
   gem 'pry'
   gem 'awesome_print'
-  gem 'jeweler'
+  gem 'jeweler', '~> 2.1.1'
 end
