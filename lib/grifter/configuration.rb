@@ -109,6 +109,14 @@ class Grifter
           service_overrides.merge!(get_service_config_from_url(service_overrides.delete(:url)))
           config[:services][service_name].merge! service_overrides
         end
+
+        # force the grifter environment variable to be the environment
+        # in some cases grifts may include other ruby code that needs to know
+        # the environment.  It may be inconvenient to include Grifter::Helpers
+        # and use grifter_configuration to access that info
+        # Therefore, we force set this env var, so anything included in a grift
+        # can access the environment here if needed
+        ENV['GRIFTER_ENVIRONMENT']= config[:environment].to_s
       else
         config[:environment] = :undefined
       end

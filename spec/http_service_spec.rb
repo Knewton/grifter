@@ -122,9 +122,6 @@ describe Grifter::HTTPService do
 
       notification_data = @notification_datas.sample
 
-      notification_data.each_pair do |k,v|
-        puts "YO: #{k}: #{v}"
-      end
       notification_data[:service].should eql 'test service'
       notification_data[:method].should eql :get
       notification_data[:path].should eql '/testing'

@@ -189,7 +189,6 @@ describe Grifter::Configuration do
       ENV['GRIFTER_CONFIG_FILE'] = 'spec/resources/example_with_no_grifts/example_config.yml'
       config = configuration.load_config_file
       config[:services].keys.should =~ [:myapi, :myotherapi]
-      ENV['GRIFTER_CONFIG_FILE'] = nil
     end
 
     it "should raise a custom exception if config file does not exist" do
@@ -233,7 +232,6 @@ describe Grifter::Configuration do
       config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
 
       config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
-      ENV['GRIFTER_ENVIRONMENT'] = nil
     end
 
     it "should allow setting environment via an environment variable with an environment alias" do
@@ -241,8 +239,35 @@ describe Grifter::Configuration do
       config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
 
       config[:services][:myapi][:hostname].should eql 'dev.myapi.com'
-      ENV['GRIFTER_ENVIRONMENT'] = nil
     end
 
+  end
+
+  it "should actually set GRIFTER_ENVIRONMENT and an environment override is given" do
+
+    ENV['GRIFTER_ENVIRONMENT'].should be_nil
+
+    config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml',
+                                            environment: :dev
+
+    ENV['GRIFTER_ENVIRONMENT'].should eql 'dev'
+  end
+
+  it "should force the GRIFTER_ENVIRONMENT variable to the configured environment if set to something different" do
+
+    ENV['GRIFTER_ENVIRONMENT'] = 'dev'
+    ENV['GRIFTER_ENVIRONMENT'].should eql 'dev'
+
+    config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml',
+                                            environment: :staging
+
+    ENV['GRIFTER_ENVIRONMENT'].should eql 'staging'
+
+  end
+
+  it "should set GRIFTER_ENVIRONMENT to the true environment name, not the alias" do
+    ENV['GRIFTER_ENVIRONMENT'] = 'dev_alt'
+    config = configuration.load_config_file config_file: 'spec/resources/example_with_no_grifts/example_config.yml'
+    ENV['GRIFTER_ENVIRONMENT'].should eql 'dev'
   end
 end

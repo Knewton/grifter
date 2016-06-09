@@ -1,10 +1,6 @@
 require 'grifter'
 
 describe Grifter do
-  before(:each) do
-    ENV.delete 'GRIFTER_ENVIRONMENT'
-    ENV.delete 'GRIFTER_CONFIG_FILE'
-  end
 
   describe "Configuration" do
     it "should allow for initializing from a config file" do
