@@ -123,7 +123,12 @@ class Grifter
       end
 
       logger.info "Request status: (#{response.status}) #{@name}: #{method.to_s.upcase} #{path}"
-      #@last_request = req
+      @last_request = {
+        method: method,
+        path: path,
+        headers: req_headers,
+        body: body,
+      }
       @last_response = response
 
       response_obj = objectify response.body
