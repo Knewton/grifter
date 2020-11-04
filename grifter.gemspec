@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Robert Schultheis".freeze]
-  s.date = "2020-11-03"
+  s.date = "2020-11-04"
   s.description = "convention based approach to interfacing with an HTTP JSON API.".freeze
   s.email = "rob@knewton.com".freeze
   s.executables = ["grift".freeze]
